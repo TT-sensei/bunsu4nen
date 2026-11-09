@@ -1287,6 +1287,12 @@
         pressKey(b.dataset.key);
       });
 
+      document.getElementById("symbol-keys").addEventListener("click", function (e) {
+        var b = e.target.closest("button");
+        if (!b) return;
+        pressKey(b.dataset.key);
+      });
+
       document.getElementById("btn-reset").addEventListener("click", function () {
         if (this.dataset.armed === "1") {
           saveJSON(KEY_MISTAKES, []);
