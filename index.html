@@ -711,7 +711,7 @@
         model.innerHTML = p.terms.map(function (t, i) {
           var percent = (t.n / t.d * 100).toFixed(2);
           return '<div class="fraction-bar-row"><span class="fraction-bar-label">' + (i === 0 ? "A" : "B") +
-            '</span><div class="fraction-track" style="--parts:' + t.d + '"><div class="fraction-fill" style="width:' +
+            '</span><div class="fraction-track" style="background-size:' + (100 / t.d).toFixed(4) + '% 100%"><div class="fraction-fill" style="width:' +
             percent + '%"></div></div><span>' + t.n + '/' + t.d + '</span></div>';
         }).join("");
       }
