@@ -293,6 +293,12 @@
       .section-note { color: var(--ink-soft); font-size: 16px; margin: 0 0 10px; }
     
       
+      .model-head { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+      .model-switch { display:flex; gap:4px; padding:3px; border-radius:10px; background:#e9f0f3; }
+      .model-switch button { min-height:34px; padding:4px 10px; border:0; border-radius:7px; background:transparent; color:var(--ink-soft); font-size:13px; font-weight:800; }
+      .model-switch button[aria-pressed="true"] { background:#fff; color:var(--ink); box-shadow:0 1px 4px rgba(34,48,58,.12); }
+      .number-line-wrap { padding:8px 4px 0; }
+      .fraction-number-line { display:block; width:100%; height:auto; overflow:visible; }
       /* 分数の大きさを確かめるテープ図 */
       .fraction-model {
         margin: 8px 4px 12px; padding: 12px 14px;
@@ -513,7 +519,13 @@
           <div class="problem" id="problem"></div>
 
           <section class="fraction-model" id="fraction-model" aria-label="分数の大きさを表す図">
-            <div class="model-heading">図で 大きさを たしかめよう</div>
+            <div class="model-head">
+              <div class="model-heading">図で 大きさを たしかめよう</div>
+              <div class="model-switch" role="group" aria-label="図の種類">
+                <button type="button" data-model-view="tape" aria-pressed="true">テープ図</button>
+                <button type="button" data-model-view="line" aria-pressed="false">数直線</button>
+              </div>
+            </div>
             <div id="fraction-model-content" aria-live="polite"></div>
           </section>
 
@@ -1029,11 +1041,16 @@
         renderStep();
       }
 
+      var fractionModelView = "tape";
+
       function renderFractionModel() {
         var p = currentProblem();
         var host = document.getElementById("fraction-model-content");
         if (!host || !p || !p.terms || p.terms.length !== 2) return;
         var d = p.ansD;
+        function total(t) { return (t.w || 0) * d + t.n; }
+        var first = total(p.terms[0]), second = total(p.terms[1]);
+        var answer = p.op === "+" ? first + second : first - second;
         function rows(units, kind) {
           var out = "";
           var wholeCount = Math.ceil(units / d);
@@ -1049,23 +1066,53 @@
             Array(d).fill('<span class="model-unit"></span>').join("") + "</div>";
           return out;
         }
-        function total(t) { return (t.w || 0) * d + t.n; }
         function row(label, units, kind) {
           return '<div class="model-row"><span class="model-label">' + label + '</span><div class="model-bars">' +
             rows(units, kind) + '</div></div>';
         }
-        var first = total(p.terms[0]), second = total(p.terms[1]);
-        var answer = p.op === "+" ? first + second : first - second;
+        function numberLine() {
+          var maxWhole = Math.max(1, Math.ceil(Math.max(first, second, answer) / d));
+          var x0 = 22, x1 = 378, width = x1 - x0;
+          var ticks = "";
+          for (var i = 0; i <= maxWhole * d; i++) {
+            var x = x0 + width * i / (maxWhole * d);
+            var major = i % d === 0;
+            ticks += '<line x1="' + x + '" y1="' + (major ? 34 : 39) + '" x2="' + x + '" y2="52" stroke="#60727c" stroke-width="' + (major ? 2 : 1) + '"/>';
+          }
+          function marker(value, color, label, y) {
+            var x = x0 + width * value / (maxWhole * d);
+            return '<circle cx="' + x + '" cy="45" r="6" fill="' + color + '" stroke="#fff" stroke-width="2"/>' +
+              '<text x="' + x + '" y="' + y + '" text-anchor="middle" font-size="12" font-weight="700" fill="' + color + '">' + label + '</text>';
+          }
+          var markers = marker(first, "#d96c2c", "A", 19) + marker(second, "#22708f", "B", 32);
+          if (uiPhase === "done") markers += marker(answer, "#35824a", "答", 19);
+          return '<svg class="fraction-number-line" viewBox="0 0 400 82" role="img" aria-label="分数の位置を表す数直線">' +
+            '<line x1="' + x0 + '" y1="45" x2="' + x1 + '" y2="45" stroke="#60727c" stroke-width="2"/>' +
+            ticks + markers +
+            '<text x="' + x0 + '" y="72" text-anchor="middle" font-size="12" fill="#54636e">0</text>' +
+            '<text x="' + x1 + '" y="72" text-anchor="middle" font-size="12" fill="#54636e">' + maxWhole + '</text></svg>';
+        }
         var note = p.type === "mixed" ?
-          "1本のまとまりは " + d + "こ分。整数の部分も、分母と同じ数ずつのまとまりで表しているよ。" :
+          "1本のまとまりは " + d + "こ分。整数部分も、分母と同じ数ずつのまとまりで表しているよ。" :
           "1本のまとまりは " + d + "こ分。1つ分の大きさは、どの段も同じだよ。";
         var firstLabel = p.op === "+" ? "① たす量" : "① もとの量";
         var secondLabel = p.op === "+" ? "② たす量" : "② ひく量";
-        host.innerHTML =
-          row(firstLabel, first, "add") +
-          row(secondLabel, second, "sub") +
-          (uiPhase === "done" ? row("答え", answer, "answer") : "") +
-          '<p class="model-note">' + (uiPhase === "done" ? "図でも、答えの大きさを確かめられたね。" : note + " 計算が終わったら、答えの図も見てみよう。") + '</p>';
+        var resultNote = uiPhase === "done" ? "図でも、答えの大きさを確かめられたね。" :
+          note + " 計算が終わったら、答えの位置も見てみよう。";
+        if (fractionModelView === "line") {
+          host.innerHTML = '<div class="number-line-wrap">' + numberLine() + '</div>' +
+            '<p class="model-note">Aは1つ目、Bは2つ目の数。' +
+            (uiPhase === "done" ? "答えの位置も確かめよう。" : "計算が終わると、答えの位置が加わるよ。") + '</p>';
+        } else {
+          host.innerHTML = row(firstLabel, first, "add") +
+            row(secondLabel, second, "sub") +
+            (uiPhase === "done" ? row("答え", answer, "answer") : "") +
+            '<p class="model-note">' + resultNote + '</p>';
+        }
+        document.querySelectorAll("[data-model-view]").forEach(function (button) {
+          var active = button.dataset.modelView === fractionModelView;
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
       }
 
       function renderStep() {
@@ -1519,6 +1566,12 @@
       });
       document.getElementById("btn-next").addEventListener("click", onNext);
       document.getElementById("btn-check").addEventListener("click", checkStep);
+      document.getElementById("fraction-model").addEventListener("click", function (e) {
+        var button = e.target.closest("[data-model-view]");
+        if (!button) return;
+        fractionModelView = button.dataset.modelView;
+        renderFractionModel();
+      });
 
       document.getElementById("step-fields").addEventListener("click", function (e) {
         var fld = e.target.closest(".field");
