@@ -720,7 +720,7 @@
           var d = pick(DENS);
           var n1 = randInt(1, d - 1), n2 = randInt(1, d - 1);
           var ans = n1 + n2;
-          if (gcd(ans, d) !== 1) continue;
+          if (ans !== d && gcd(ans, d) !== 1) continue;
           return { type: "add", op: "+",
             terms: [{ w: 0, n: n1, d: d }, { w: 0, n: n2, d: d }], ansN: ans, ansD: d };
         }
@@ -754,7 +754,7 @@
           if (op === "+") {
             w2 = Math.random() < 0.4 ? 0 : randInt(1, 3);
             var sumN = n1 + n2;
-            if (gcd(sumN, d) !== 1) continue;       // 答えが 約分不要に なる
+            if (sumN !== d && gcd(sumN, d) !== 1) continue; // 1ちょうど、または約分不要の答え
             var carryUp = sumN >= d ? 1 : 0;        // 分数の部分の くり上がり
             var wholeAns = w1 + w2 + carryUp;
             var remAns = sumN - carryUp * d;
@@ -888,7 +888,7 @@
             wrong: "計算は「" + nExpr.replace("？", "□") + "」だよ。ゆっくり もう一度 計算してみよう。",
             okText: "分子は " + nExpect + " だね。"
           });
-          if (p.ansN > d) {
+          if (p.ansN >= d) {
             steps.push({
               id: "convert", slots: ["whole", "num"],
               title: "帯分数に 直そう",
@@ -913,11 +913,13 @@
         var sign = p.op === "+" ? "＋" : "－";
         var whole = Math.floor(p.ansN / d), rem = p.ansN % d;
         var ansHTML = whole > 0 ?
-          '<span><span class="whole">' + whole + "</span>" + fracHTML(rem, d, false) + "</span>" :
+          '<span><span class="whole">' + whole + "</span>" + (rem > 0 ? fracHTML(rem, d, false) : "") + "</span>" :
           fracHTML(p.ansN, d, false);
         var lines = ['<div class="final-answer">' + problemHTML(p, false) + " " + ansHTML + "</div>"];
         if (p.type === "mixed") {
           lines.push("<p>分母は " + d + " のまま。整数の 部分と 分数の 部分を 分けて 計算しました。</p>");
+        } else if (whole > 0 && rem === 0) {
+          lines.push("<p>分子と 分母が 同じ 大きさに なったので、答えは 整数の " + whole + " です。</p>");
         } else if (whole > 0) {
           lines.push("<p>" + fracHTML(p.ansN, d, true) + " は、帯分数では " +
             '<span><span class="whole">' + whole + "</span>" + fracHTML(rem, d, true) + "</span> と 同じ 大きさです。</p>");
@@ -1034,7 +1036,8 @@
         var fracPart = '<span class="frac"><span class="f-num">' + slot(built.num, "num") +
           '</span><span class="f-den">' + slot(built.den, "den") + "</span></span>";
         var showWhole = p.type === "mixed" || built.converted || step.id === "convert";
-        document.getElementById("builder").innerHTML = (showWhole ? slot(built.whole, "whole") : "") + fracPart;
+        document.getElementById("builder").innerHTML =
+          (built.converted && built.num === 0 ? slot(built.whole, "whole") : (showWhole ? slot(built.whole, "whole") : "") + fracPart);
       }
 
       function renderStepFields() {
@@ -1304,7 +1307,8 @@
         var fracPart = '<span class="frac"><span class="f-num">' + slot(built.num, "num") +
           '</span><span class="f-den">' + slot(built.den, "den") + "</span></span>";
         var showWhole = p.type === "mixed" || built.converted || step.id === "convert";
-        return (showWhole ? slot(built.whole, "whole") : "") + fracPart;
+        return built.converted && built.num === 0 ? slot(built.whole, "whole") :
+          (showWhole ? slot(built.whole, "whole") : "") + fracPart;
       }
 
       function renderExampleStep() {
@@ -1398,72 +1402,3 @@
       });
       document.querySelectorAll("[data-example]").forEach(function (el) {
         el.addEventListener("click", function () { startExample(el.dataset.example); });
-      });
-      document.getElementById("btn-ex-next").addEventListener("click", function () {
-        if (!example) return;
-        example.stepIdx += 1;
-        if (example.stepIdx >= example.steps.length) example.stepIdx = example.steps.length - 1;
-        renderExampleStep();
-      });
-      document.getElementById("btn-ex-practice").addEventListener("click", function () {
-        if (example) startNormal(example.type);
-      });
-      document.getElementById("btn-ex-home").addEventListener("click", function () { refreshHome(); show("home"); });
-      document.getElementById("btn-ex-quit").addEventListener("click", function () { refreshHome(); show("home"); });
-      document.getElementById("btn-sound").addEventListener("click", function () {
-        settings.sound = !settings.sound;
-        saveSettings();
-        renderSoundBtn();
-        if (settings.sound) playSound("decide");
-      });
-      document.getElementById("btn-tokkun").addEventListener("click", function () {
-        if (loadMistakes().length === 0) {
-          document.getElementById("tokkun-desc").textContent = "まちがえた 問題は まだ ないよ。先に れんしゅうを してみよう。";
-          return;
-        }
-        startTokkun();
-      });
-      document.getElementById("btn-records").addEventListener("click", function () {
-        renderRecords();
-        show("records");
-      });
-      document.getElementById("btn-records-back").addEventListener("click", function () { refreshHome(); show("home"); });
-      document.getElementById("btn-quit").addEventListener("click", function () { refreshHome(); show("home"); });
-      document.getElementById("btn-result-home").addEventListener("click", function () { refreshHome(); show("home"); });
-      document.getElementById("btn-again").addEventListener("click", function () {
-        if (this.dataset.action === "again" && session) startNormal(session.type);
-        else { refreshHome(); show("home"); }
-      });
-      document.getElementById("btn-next").addEventListener("click", onNext);
-      document.getElementById("btn-check").addEventListener("click", checkStep);
-
-      document.getElementById("step-fields").addEventListener("click", function (e) {
-        var fld = e.target.closest(".field");
-        if (!fld || uiPhase !== "input") return;
-        activeFieldKey = fld.dataset.fkey;
-        renderStepFields();
-      });
-
-      document.getElementById("keypad").addEventListener("click", function (e) {
-        var b = e.target.closest("button");
-        if (!b) return;
-        pressKey(b.dataset.key);
-      });
-
-      document.getElementById("btn-reset").addEventListener("click", function () {
-        if (this.dataset.armed === "1") {
-          saveJSON(KEY_MISTAKES, []);
-          saveJSON(KEY_STATS, { add: { total: 0, correct: 0 }, sub: { total: 0, correct: 0 }, mixed: { total: 0, correct: 0 } });
-          renderRecords();
-        } else {
-          this.dataset.armed = "1";
-          this.textContent = "ほんとうに 消す？ もう一度 おしてね";
-          this.classList.add("confirm");
-        }
-      });
-
-      renderSoundBtn();
-      refreshHome();
-    </script>
-  </body>
-</html>
