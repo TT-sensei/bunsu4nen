@@ -317,6 +317,15 @@
       .model-unit.filled.answer { background: #91cda0; border-color: #35824a; }
       .model-unit.filled.borrow { background:#f7d98a; border-color:#b88719; }
       .model-note { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+      .model-row + .model-note { padding-top: 5px; border-top: 1px solid var(--line); }
+      .model-value { font-size: 13px; }
+      #feedback[aria-live="polite"] { min-height: 0; }
+      .step-fields:empty { display: none; }
+      .step-field { min-width: 104px; }
+      .step-field .field { transition: border-color .12s ease, background .12s ease; }
+      .step-field .field[aria-current="true"] { border-color: var(--ink); }
+      .dots span { flex: none; }
+      .dots span.now { background: #fff; box-shadow: inset 0 0 0 5px var(--ink); }
       @media (min-width:760px) and (orientation:landscape) {
         #view-practice .card {
           grid-template-areas:
@@ -373,6 +382,7 @@
             "heading heading"
             "progress progress"
             "problem steps"
+            "visual steps"
             "builder steps"
             "keypad steps"
             "check feedback";
@@ -510,14 +520,14 @@
       <section id="view-practice" class="hidden">
         <div class="practice-top">
           <button class="back-btn" id="btn-quit">← トップへ もどる</button>
-          <span class="progress-label" id="progress-label">1 / 10 もん</span>
+          <span class="progress-label" id="progress-label" aria-live="polite">1 / 10 もん</span>
         </div>
         <div class="card">
           <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
             <span id="practice-type-name" style="font-size:20px; font-weight:800;"></span>
             <span class="navi-chip" id="practice-chip"><img class="n-face" id="practice-face" src="" alt="" /><span class="n-name" id="practice-navi-name"></span><span id="practice-navi-hint"></span></span>
           </div>
-          <div class="dots" id="dots"></div>
+          <div class="dots" id="dots" role="group" aria-label="10問の進み具合"></div>
           <div class="problem" id="problem"></div>
 
           <section class="fraction-model" id="fraction-model" aria-label="分数の大きさを表す図">
@@ -555,7 +565,7 @@
           </div>
           <button class="check-btn" id="btn-check">たしかめる</button>
 
-          <div class="feedback hidden" id="feedback">
+          <div class="feedback hidden" id="feedback" aria-live="polite" aria-atomic="true">
             <p class="f-title" id="feedback-title"></p>
             <div id="feedback-body"></div>
             <button class="next-btn" id="btn-next">つぎの もんだいへ</button>
@@ -1231,6 +1241,8 @@
           fld.setAttribute("role", "button");
           fld.setAttribute("tabindex", "0");
           fld.dataset.fkey = f.key;
+          fld.setAttribute("aria-label", f.caption + "を入力");
+          fld.setAttribute("aria-current", activeFieldKey === f.key && uiPhase === "input" ? "true" : "false");
           fld.innerHTML = stepInput[f.key] === "" ? '<span class="placeholder">？</span>' : stepInput[f.key];
           box.appendChild(cap);
           box.appendChild(fld);
@@ -1264,7 +1276,8 @@
         var nb = document.getElementById("btn-next");
         if (nextLabel) { nb.classList.remove("hidden"); nb.textContent = nextLabel; }
         else nb.classList.add("hidden");
-        fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        // 横向きタブレットでは画面内に配置しているため、不要な自動スクロールをしない。
+        if (window.innerWidth < 760) fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
 
       function checkStep() {
@@ -1275,7 +1288,10 @@
           if (stepInput[f.key] === "") filled = false;
           else if (parseInt(stepInput[f.key], 10) !== f.expect) ok = false;
         });
-        if (!filled) return;
+        if (!filled) {
+          showFeedback("ng", "数字を 入れてね", "<p>空いている わくを おして、数字を 入れよう。</p>", null);
+          return;
+        }
         if (!ok) { onStepWrong(step); return; }
         onStepCorrect(step);
       }
@@ -1629,6 +1645,20 @@
         if (!fld || uiPhase !== "input") return;
         activeFieldKey = fld.dataset.fkey;
         renderStepFields();
+      });
+
+      // キーボードでも入力・決定できるようにする（タブレットの画面テンキーはそのまま）。
+      document.addEventListener("keydown", function (e) {
+        if (document.getElementById("view-practice").classList.contains("hidden")) return;
+        if (e.altKey || e.ctrlKey || e.metaKey) return;
+        if (/^[0-9]$/.test(e.key)) { e.preventDefault(); pressKey(e.key); }
+        else if (e.key === "Backspace") { e.preventDefault(); pressKey("bs"); }
+        else if (e.key === "Escape") { e.preventDefault(); pressKey("clear"); }
+        else if (e.key === "Enter") {
+          e.preventDefault();
+          if (uiPhase === "input") checkStep();
+          else if (uiPhase === "stepOk" || uiPhase === "done") onNext();
+        }
       });
 
       document.getElementById("keypad").addEventListener("click", function (e) {
