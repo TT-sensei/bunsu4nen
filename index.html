@@ -1059,11 +1059,13 @@
         var note = p.type === "mixed" ?
           "1本のまとまりは " + d + "こ分。整数の部分も、分母と同じ数ずつのまとまりで表しているよ。" :
           "1本のまとまりは " + d + "こ分。1つ分の大きさは、どの段も同じだよ。";
+        var firstLabel = p.op === "+" ? "① たす量" : "① もとの量";
+        var secondLabel = p.op === "+" ? "② たす量" : "② ひく量";
         host.innerHTML =
-          row("① はじめ", first, "add") +
-          row("② あわせる", second, "sub") +
-          row("答え", answer, "answer") +
-          '<p class="model-note">' + note + '</p>';
+          row(firstLabel, first, "add") +
+          row(secondLabel, second, "sub") +
+          (uiPhase === "done" ? row("答え", answer, "answer") : "") +
+          '<p class="model-note">' + (uiPhase === "done" ? "図でも、答えの大きさを確かめられたね。" : note + " 計算が終わったら、答えの図も見てみよう。") + '</p>';
       }
 
       function renderStep() {
@@ -1244,6 +1246,7 @@
         var p = currentProblem();
         var correct = !session.currentWrong;
         uiPhase = "done";
+        renderFractionModel();
         session.results.push(correct);
         addStat(p.type, correct);
         if (correct) {
