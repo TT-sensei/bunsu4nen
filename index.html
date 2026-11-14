@@ -315,6 +315,7 @@
       .model-unit.filled.add { background: #f4b17e; border-color: #d96c2c; }
       .model-unit.filled.sub { background: #8bc5dc; border-color: #22708f; }
       .model-unit.filled.answer { background: #91cda0; border-color: #35824a; }
+      .model-unit.filled.borrow { background:#f7d98a; border-color:#b88719; }
       .model-note { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
       @media (min-width:760px) and (orientation:landscape) {
         #view-practice .card {
@@ -1139,9 +1140,20 @@
           : "Aの大きさからBの大きさをひくと、残りが答えになるよ。";
         if (uiPhase !== "done") resultNote += " 計算が終わったら、答えも図に表そう。";
         else resultNote += " 図と数直線の両方で、答えを確かめられたね。";
+        var a = p.terms[0], b = p.terms[1];
+        var needsBorrow = p.type === "mixed" && p.op === "-" && a.n < b.n;
         if (fractionModelView === "line") {
           host.innerHTML = '<div class="number-line-wrap">' + numberLine() + '</div>' +
             '<p class="model-note">' + resultNote + '</p>';
+        } else if (needsBorrow) {
+          var regrouped = { w: a.w - 1, n: a.n + d, d: d };
+          host.innerHTML =
+            row("① もとの量", first, "add", a) +
+            '<div class="model-note">整数の1をくずして、分母と同じ ' + d + 'こ分を分子にうつす</div>' +
+            row("② くずした後", first, "borrow", regrouped) +
+            row("③ ひく量", second, "sub", b) +
+            (uiPhase === "done" ? row("答え", answer, "answer", answerTerm) : "") +
+            '<p class="model-note">もとの量と、くずした後の量は同じ大きさ。分数の部分をひける形にしてから計算するよ。</p>';
         } else {
           host.innerHTML = row(firstLabel, first, "add", p.terms[0]) +
             row(secondLabel, second, "sub", p.terms[1]) +
