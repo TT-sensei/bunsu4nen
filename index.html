@@ -291,6 +291,165 @@
       .reset-btn.confirm { background: var(--ng); color: #fff; }
       .section-title { font-size: 24px; font-weight: 800; margin: 0 0 6px; }
       .section-note { color: var(--ink-soft); font-size: 16px; margin: 0 0 10px; }
+    
+      
+      .model-head { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+      .model-switch { display:flex; gap:4px; padding:3px; border-radius:10px; background:#e9f0f3; }
+      .model-switch button { min-height:34px; padding:4px 10px; border:0; border-radius:7px; background:transparent; color:var(--ink-soft); font-size:13px; font-weight:800; }
+      .model-switch button[aria-pressed="true"] { background:#fff; color:var(--ink); box-shadow:0 1px 4px rgba(34,48,58,.12); }
+      .number-line-wrap { padding:8px 4px 0; }
+      .fraction-number-line { display:block; width:100%; height:auto; overflow:visible; }
+      /* 分数の大きさを確かめるテープ図 */
+      .fraction-model {
+        margin: 8px 4px 12px; padding: 12px 14px;
+        border: 1px solid var(--line); border-radius: 14px;
+        background: #f8fbfc; min-width: 0;
+      }
+      .model-heading { font-size: 15px; font-weight: 800; color: var(--ink-soft); margin-bottom: 7px; }
+      .model-row { display: grid; grid-template-columns: 76px minmax(0,1fr); gap: 8px; align-items: center; margin: 5px 0; }
+      .model-label { display:flex; flex-direction:column; gap:1px; font-size: 12px; line-height:1.3; font-weight: 800; color: var(--ink-soft); }
+      .model-value { color:var(--ink); font-size:14px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+      .model-bars { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+      .model-whole { display: grid; gap: 2px; min-height: 17px; }
+      .model-unit { min-width: 0; height: 17px; border: 1px solid #b9c9d0; border-radius: 3px; background: #fff; }
+      .model-unit.filled.add { background: #f4b17e; border-color: #d96c2c; }
+      .model-unit.filled.sub { background: #8bc5dc; border-color: #22708f; }
+      .model-unit.filled.answer { background: #91cda0; border-color: #35824a; }
+      .model-unit.filled.borrow { background:#f7d98a; border-color:#b88719; }
+      @media (min-width:760px) {
+        .model-switch button { min-height:42px; padding:6px 14px; font-size:14px; }
+      }
+      .model-note { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+      .model-row + .model-note { padding-top: 5px; border-top: 1px solid var(--line); }
+      .model-value { font-size: 13px; }
+      #feedback[aria-live="polite"] { min-height: 0; }
+      .step-fields:empty { display: none; }
+      .step-field { min-width: 104px; }
+      .step-field .field { transition: border-color .12s ease, background .12s ease; }
+      .step-field .field[aria-current="true"] { border-color: var(--ink); }
+      .dots span { flex: none; }
+      .dots span.now { background: #fff; box-shadow: inset 0 0 0 5px var(--ink); }
+      @media (min-width:760px) and (orientation:landscape) {
+        #view-practice .card {
+          grid-template-areas:
+            "heading heading"
+            "progress progress"
+            "problem steps"
+            "visual steps"
+            "builder steps"
+            "keypad steps"
+            "check feedback";
+        }
+        #view-practice .fraction-model { grid-area: visual; margin: 0 8px 4px; padding: 8px 12px; }
+        #view-practice .model-unit { height: 14px; }
+        #view-practice .model-row { grid-template-columns: 70px minmax(0,1fr); }
+      }
+
+      /* ---------- タブレット最適化：横画面・タッチ操作 ---------- */
+      button, [role="button"] { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+      button:focus-visible, [role="button"]:focus-visible {
+        outline: 4px solid #f0b429; outline-offset: 3px;
+      }
+      button:disabled { cursor: not-allowed; }
+      .type-card, .sub-card, .back-btn, .sound-toggle, .keypad button,
+      .check-btn, .next-btn, .btn-row button { touch-action: manipulation; }
+      .field { user-select: none; -webkit-user-select: none; }
+      @media (min-width: 760px) {
+        .wrap { max-width: 1120px; padding: 16px 22px 28px; }
+        header.app-head { gap: 12px; margin-bottom: 14px; }
+        header.app-head h1 { font-size: 28px; }
+        .head-note { width: auto; flex: 1 1 100%; }
+        .menu { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+        .type-card { padding: 18px; }
+        .type-card .t-name { font-size: 23px; }
+        .type-card .t-desc { min-height: 3.2em; font-size: 16px; }
+        .navi-chip { font-size: 14px; padding-right: 10px; gap: 7px; }
+        .navi-chip .n-face { width: 38px; height: 38px; }
+        .navi-chip .n-name { font-size: 14px; padding: 2px 9px; }
+        .t-actions { gap: 8px; }
+        .t-actions button { flex-basis: 130px; min-height: 58px; font-size: 17px; }
+        .sub-menu { margin-top: 14px; }
+        .sub-card { min-height: 88px; }
+      }
+      @media (min-width: 760px) and (orientation: landscape) {
+        body { min-height: 100dvh; }
+        .wrap { max-width: 1280px; padding: 10px 20px 18px; }
+        header.app-head { margin-bottom: 8px; }
+        header.app-head h1 { font-size: 25px; }
+        .head-note { font-size: 14px; margin-top: 0; }
+        .practice-top { margin-bottom: 8px; }
+        #view-practice .card {
+          display: grid;
+          grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+          grid-template-areas:
+            "heading heading"
+            "progress progress"
+            "problem steps"
+            "visual steps"
+            "builder steps"
+            "keypad steps"
+            "check feedback";
+          column-gap: 26px;
+          row-gap: 5px;
+          align-items: start;
+          padding: 16px 22px;
+        }
+        #view-practice .card > div:first-child { grid-area: heading; }
+        #view-practice #dots { grid-area: progress; margin: 4px 0 2px; }
+        #view-practice #problem {
+          grid-area: problem; align-self: end;
+          min-height: 116px; padding: 8px 8px 2px; font-size: 42px;
+        }
+        #view-practice .builder-wrap {
+          grid-area: builder; margin: 0; align-self: start;
+          padding: 4px 8px 10px;
+        }
+        #view-practice .builder { min-height: 76px; font-size: 38px; }
+        #view-practice .builder .frac { font-size: 38px; }
+        #view-practice .step-panel {
+          grid-area: steps; margin: 0; padding: 10px 0 0 18px;
+          border-top: 0; border-left: 2px dashed var(--line);
+          min-width: 0; align-self: stretch;
+        }
+        #view-practice .step-title { font-size: 21px; }
+        #view-practice .step-reason { font-size: 15px; margin-top: 5px; }
+        #view-practice .step-note { font-size: 16px; margin-top: 8px; }
+        #view-practice .step-expr { font-size: 22px; margin-top: 8px; }
+        #view-practice .step-fields { margin-top: 8px; gap: 12px; }
+        #view-practice .field { width: 112px; min-height: 62px; font-size: 34px; }
+        #view-practice #keypad {
+          grid-area: keypad; width: min(100%, 390px);
+          margin: 4px auto 0; gap: 7px;
+        }
+        #view-practice .keypad button { min-height: 48px; font-size: 24px; border-radius: 12px; }
+        #view-practice .keypad button.util { font-size: 16px; }
+        #view-practice #btn-check {
+          grid-area: check; width: min(100%, 390px);
+          margin: 5px auto 0; min-height: 54px; font-size: 20px;
+        }
+        #view-practice #feedback {
+          grid-area: feedback; margin-top: 5px; padding: 12px 14px;
+          font-size: 15px; min-width: 0;
+        }
+        #view-practice .feedback .f-title { font-size: 20px; }
+        #view-practice .next-btn { min-height: 50px; margin-top: 8px; font-size: 18px; }
+      }
+      @media (max-width: 759px) {
+        .wrap { padding: 12px 12px 28px; }
+        .card { padding: 18px 14px; }
+        .problem { font-size: clamp(32px, 8vw, 44px); }
+        .keypad { gap: 8px; }
+        .keypad button { min-height: 60px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          scroll-behavior: auto !important;
+          animation-duration: .01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: .01ms !important;
+        }
+      }
+
     </style>
   </head>
   <body>
@@ -364,15 +523,26 @@
       <section id="view-practice" class="hidden">
         <div class="practice-top">
           <button class="back-btn" id="btn-quit">← トップへ もどる</button>
-          <span class="progress-label" id="progress-label">1 / 10 もん</span>
+          <span class="progress-label" id="progress-label" aria-live="polite">1 / 10 もん</span>
         </div>
         <div class="card">
           <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
             <span id="practice-type-name" style="font-size:20px; font-weight:800;"></span>
             <span class="navi-chip" id="practice-chip"><img class="n-face" id="practice-face" src="" alt="" /><span class="n-name" id="practice-navi-name"></span><span id="practice-navi-hint"></span></span>
           </div>
-          <div class="dots" id="dots"></div>
+          <div class="dots" id="dots" role="group" aria-label="10問の進み具合"></div>
           <div class="problem" id="problem"></div>
+
+          <section class="fraction-model" id="fraction-model" aria-label="分数の大きさを表す図">
+            <div class="model-head">
+              <div class="model-heading">図で 大きさを たしかめよう</div>
+              <div class="model-switch" role="group" aria-label="図の種類">
+                <button type="button" data-model-view="tape" aria-pressed="true">テープ図</button>
+                <button type="button" data-model-view="line" aria-pressed="false">数直線</button>
+              </div>
+            </div>
+            <div id="fraction-model-content" aria-live="polite"></div>
+          </section>
 
           <div class="builder-wrap">
             <p class="builder-label">答えを 組み立てよう</p>
@@ -398,7 +568,7 @@
           </div>
           <button class="check-btn" id="btn-check">たしかめる</button>
 
-          <div class="feedback hidden" id="feedback">
+          <div class="feedback hidden" id="feedback" aria-live="polite" aria-atomic="true">
             <p class="f-title" id="feedback-title"></p>
             <div id="feedback-body"></div>
             <button class="next-btn" id="btn-next">つぎの もんだいへ</button>
@@ -615,7 +785,7 @@
           var d = pick(DENS);
           var n1 = randInt(1, d - 1), n2 = randInt(1, d - 1);
           var ans = n1 + n2;
-          if (gcd(ans, d) !== 1) continue;
+          if (ans !== d && gcd(ans, d) !== 1) continue;
           return { type: "add", op: "+",
             terms: [{ w: 0, n: n1, d: d }, { w: 0, n: n2, d: d }], ansN: ans, ansD: d };
         }
@@ -637,8 +807,8 @@
          組み立てられる形にする：たし算では分数の部分が 1以上に なって
          くり上がる（1にまとめる）問題も 出す。ひき算では くり下がり
          （1をくずす）が あっても 整数の部分が マイナスに ならない
-         問題だけを 出す。答えは 約分不要を 保証する（分子の和が 分母と
-         ちょうど 同じに なる形は、gcd の 条件で はじかれる）。 */
+         問題だけを 出す。答えは 約分不要を 基本にしつつ、分数の部分が 分母と ちょうど 同じに
+         なる形（整数に まとまる大切な問題）も 出題する。 */
       function makeMixed() {
         for (var i = 0; i < 600; i++) {
           var d = pick(DENS);
@@ -649,7 +819,7 @@
           if (op === "+") {
             w2 = Math.random() < 0.4 ? 0 : randInt(1, 3);
             var sumN = n1 + n2;
-            if (gcd(sumN, d) !== 1) continue;       // 答えが 約分不要に なる
+            if (sumN !== d && gcd(sumN, d) !== 1) continue; // 1ちょうど、または約分不要の答え
             var carryUp = sumN >= d ? 1 : 0;        // 分数の部分の くり上がり
             var wholeAns = w1 + w2 + carryUp;
             var remAns = sumN - carryUp * d;
@@ -783,7 +953,7 @@
             wrong: "計算は「" + nExpr.replace("？", "□") + "」だよ。ゆっくり もう一度 計算してみよう。",
             okText: "分子は " + nExpect + " だね。"
           });
-          if (p.ansN > d) {
+          if (p.ansN >= d) {
             steps.push({
               id: "convert", slots: ["whole", "num"],
               title: "帯分数に 直そう",
@@ -808,11 +978,13 @@
         var sign = p.op === "+" ? "＋" : "－";
         var whole = Math.floor(p.ansN / d), rem = p.ansN % d;
         var ansHTML = whole > 0 ?
-          '<span><span class="whole">' + whole + "</span>" + fracHTML(rem, d, false) + "</span>" :
+          '<span><span class="whole">' + whole + "</span>" + (rem > 0 ? fracHTML(rem, d, false) : "") + "</span>" :
           fracHTML(p.ansN, d, false);
         var lines = ['<div class="final-answer">' + problemHTML(p, false) + " " + ansHTML + "</div>"];
         if (p.type === "mixed") {
           lines.push("<p>分母は " + d + " のまま。整数の 部分と 分数の 部分を 分けて 計算しました。</p>");
+        } else if (whole > 0 && rem === 0) {
+          lines.push("<p>分子と 分母が 同じ 大きさに なったので、答えは 整数の " + whole + " です。</p>");
         } else if (whole > 0) {
           lines.push("<p>" + fracHTML(p.ansN, d, true) + " は、帯分数では " +
             '<span><span class="whole">' + whole + "</span>" + fracHTML(rem, d, true) + "</span> と 同じ 大きさです。</p>");
@@ -837,9 +1009,37 @@
       var stepInput = {};
       var activeFieldKey = null;
 
+      function problemSignature(p) {
+        var parts = p.terms.map(function (t) {
+          return (t.w || 0) + ":" + t.n + "/" + t.d;
+        });
+        if (p.op === "+") parts.sort(); // たし算は順番が違っても同じ問題として扱う
+        return p.type + "|" + p.op + "|" + parts.join("|");
+      }
+
+      function makeQuestionQueue(type, count) {
+        var queue = [], seen = Object.create(null);
+        for (var i = 0; i < count; i++) {
+          var candidate = null;
+          // 同じ10問の中で、同じ問題が重ならないようにする
+          for (var attempt = 0; attempt < 80; attempt++) {
+            var next = makeProblem(type);
+            var key = problemSignature(next);
+            if (!seen[key]) {
+              candidate = next;
+              seen[key] = true;
+              break;
+            }
+          }
+          // 問題の種類を増やせない場合も、練習が止まらないよう最後は採用する
+          if (!candidate) candidate = makeProblem(type);
+          queue.push(candidate);
+        }
+        return queue;
+      }
+
       function startNormal(type) {
-        var queue = [];
-        for (var i = 0; i < SESSION_LEN; i++) queue.push(makeProblem(type));
+        var queue = makeQuestionQueue(type, SESSION_LEN);
         session = { mode: "normal", type: type, queue: queue, idx: 0, results: [], addedMistakes: 0 };
         playSound("start");
         show("practice");
@@ -884,6 +1084,101 @@
         renderStep();
       }
 
+      var fractionModelView = "tape";
+
+      function renderFractionModel() {
+        var p = currentProblem();
+        var host = document.getElementById("fraction-model-content");
+        if (!host || !p || !p.terms || p.terms.length !== 2) return;
+        var d = p.ansD;
+        function total(t) { return (t.w || 0) * d + t.n; }
+        var first = total(p.terms[0]), second = total(p.terms[1]);
+        var answer = p.op === "+" ? first + second : first - second;
+        function rows(units, kind) {
+          var out = "";
+          var wholeCount = Math.ceil(units / d);
+          for (var r = 0; r < wholeCount; r++) {
+            out += '<div class="model-whole" style="grid-template-columns:repeat(' + d + ',minmax(0,1fr))">';
+            for (var c = 0; c < d; c++) {
+              var filled = r * d + c < units;
+              out += '<span class="model-unit' + (filled ? ' filled ' + kind : '') + '"></span>';
+            }
+            out += "</div>";
+          }
+          if (units === 0) out = '<div class="model-whole" style="grid-template-columns:repeat(' + d + ',minmax(0,1fr))">' +
+            Array(d).fill('<span class="model-unit"></span>').join("") + "</div>";
+          return out;
+        }
+        function fractionText(t) {
+          if (t.n === 0) return String(t.w);
+          return (t.w ? t.w + " " : "") + t.n + "/" + t.d;
+        }
+        function row(label, units, kind, term) {
+          var value = term ? '<span class="model-value">' + fractionText(term) + '</span>' : "";
+          return '<div class="model-row"><span class="model-label"><span>' + label + '</span>' + value + '</span><div class="model-bars">' +
+            rows(units, kind) + '</div></div>';
+        }
+        function numberLine() {
+          var maxWhole = Math.max(1, Math.ceil(Math.max(first, second, answer) / d));
+          var x0 = 22, x1 = 378, width = x1 - x0;
+          var ticks = "", wholeLabels = "";
+          for (var i = 0; i <= maxWhole * d; i++) {
+            var x = x0 + width * i / (maxWhole * d);
+            var major = i % d === 0;
+            ticks += '<line x1="' + x + '" y1="' + (major ? 34 : 39) + '" x2="' + x + '" y2="52" stroke="#60727c" stroke-width="' + (major ? 2 : 1) + '"/>';
+            if (major) {
+              wholeLabels += '<text x="' + x + '" y="72" text-anchor="middle" font-size="12" fill="#54636e">' + (i / d) + '</text>';
+            }
+          }
+          function marker(value, color, label, y) {
+            var x = x0 + width * value / (maxWhole * d);
+            return '<circle cx="' + x + '" cy="45" r="6" fill="' + color + '" stroke="#fff" stroke-width="2"/>' +
+              '<text x="' + x + '" y="' + y + '" text-anchor="middle" font-size="12" font-weight="700" fill="' + color + '">' + label + '</text>';
+          }
+          var markers = marker(first, "#d96c2c", "A", 17) + marker(second, "#22708f", "B", 31);
+          if (uiPhase === "done") markers += marker(answer, "#35824a", "答", 17);
+          var operation = p.op === "+" ? "AとBの位置を見比べよう" : "AからBをひいた残りが答えの位置";
+          return '<svg class="fraction-number-line" viewBox="0 0 400 82" role="img" aria-label="0から' + maxWhole + 'までを' + d + '等分した数直線。Aは' + fractionText(p.terms[0]) + '、Bは' + fractionText(p.terms[1]) + (uiPhase === "done" ? '、答えは' + fractionText({w:Math.floor(answer/d),n:answer%d,d:d}) : '') + '">' +
+            '<line x1="' + x0 + '" y1="45" x2="' + x1 + '" y2="45" stroke="#60727c" stroke-width="2"/>' +
+            ticks + markers + wholeLabels + '</svg>';
+        }
+        var note = p.type === "mixed" ?
+          "1本のまとまりは " + d + "こ分。整数部分も、分母と同じ数ずつのまとまりで表しているよ。" :
+          "1本のまとまりは " + d + "こ分。1つ分の大きさは、どの段も同じだよ。";
+        var firstLabel = p.op === "+" ? "① たす量" : "① もとの量";
+        var secondLabel = p.op === "+" ? "② たす量" : "② ひく量";
+        var answerTerm = { w: Math.floor(answer / d), n: answer % d, d: d };
+        var resultNote = p.op === "+"
+          ? "Aの大きさとBの大きさを合わせると、答えの大きさになるよ。"
+          : "Aの大きさからBの大きさをひくと、残りが答えになるよ。";
+        if (uiPhase !== "done") resultNote += " 計算が終わったら、答えも図に表そう。";
+        else resultNote += " 図と数直線の両方で、答えを確かめられたね。";
+        var a = p.terms[0], b = p.terms[1];
+        var needsBorrow = p.type === "mixed" && p.op === "-" && a.n < b.n;
+        if (fractionModelView === "line") {
+          host.innerHTML = '<div class="number-line-wrap">' + numberLine() + '</div>' +
+            '<p class="model-note">' + resultNote + '</p>';
+        } else if (needsBorrow) {
+          var regrouped = { w: a.w - 1, n: a.n + d, d: d };
+          host.innerHTML =
+            row("① もとの量", first, "add", a) +
+            '<div class="model-note">整数の1をくずして、分母と同じ ' + d + 'こ分を分子にうつす</div>' +
+            row("② くずした後", first, "borrow", regrouped) +
+            row("③ ひく量", second, "sub", b) +
+            (uiPhase === "done" ? row("答え", answer, "answer", answerTerm) : "") +
+            '<p class="model-note">もとの量と、くずした後の量は同じ大きさ。分数の部分をひける形にしてから計算するよ。</p>';
+        } else {
+          host.innerHTML = row(firstLabel, first, "add", p.terms[0]) +
+            row(secondLabel, second, "sub", p.terms[1]) +
+            (uiPhase === "done" ? row("答え", answer, "answer", answerTerm) : "") +
+            '<p class="model-note">' + note + ' ' + resultNote + '</p>';
+        }
+        document.querySelectorAll("[data-model-view]").forEach(function (button) {
+          var active = button.dataset.modelView === fractionModelView;
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+      }
+
       function renderStep() {
         var p = currentProblem();
         var step = currentStep();
@@ -893,6 +1188,7 @@
         activeFieldKey = step.fields[0].key;
 
         document.getElementById("problem").innerHTML = problemHTML(p, step.id === "den");
+        renderFractionModel();
         renderBuilder();
 
         var inputSteps = session.steps.length - 1; // 最後の 'done' を除いた数
@@ -929,7 +1225,8 @@
         var fracPart = '<span class="frac"><span class="f-num">' + slot(built.num, "num") +
           '</span><span class="f-den">' + slot(built.den, "den") + "</span></span>";
         var showWhole = p.type === "mixed" || built.converted || step.id === "convert";
-        document.getElementById("builder").innerHTML = (showWhole ? slot(built.whole, "whole") : "") + fracPart;
+        document.getElementById("builder").innerHTML =
+          (built.converted && built.num === 0 ? slot(built.whole, "whole") : (showWhole ? slot(built.whole, "whole") : "") + fracPart);
       }
 
       function renderStepFields() {
@@ -947,6 +1244,8 @@
           fld.setAttribute("role", "button");
           fld.setAttribute("tabindex", "0");
           fld.dataset.fkey = f.key;
+          fld.setAttribute("aria-label", f.caption + "を入力");
+          fld.setAttribute("aria-current", activeFieldKey === f.key && uiPhase === "input" ? "true" : "false");
           fld.innerHTML = stepInput[f.key] === "" ? '<span class="placeholder">？</span>' : stepInput[f.key];
           box.appendChild(cap);
           box.appendChild(fld);
@@ -980,7 +1279,10 @@
         var nb = document.getElementById("btn-next");
         if (nextLabel) { nb.classList.remove("hidden"); nb.textContent = nextLabel; }
         else nb.classList.add("hidden");
-        fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        // 横向きタブレットでは画面内に配置しているため、不要な自動スクロールをしない。
+        var tabletLandscape = window.matchMedia &&
+          window.matchMedia("(min-width: 760px) and (orientation: landscape)").matches;
+        if (!tabletLandscape) fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
 
       function checkStep() {
@@ -991,7 +1293,10 @@
           if (stepInput[f.key] === "") filled = false;
           else if (parseInt(stepInput[f.key], 10) !== f.expect) ok = false;
         });
-        if (!filled) return;
+        if (!filled) {
+          showFeedback("ng", "数字を 入れてね", "<p>空いている わくを おして、数字を 入れよう。</p>", null);
+          return;
+        }
         if (!ok) { onStepWrong(step); return; }
         onStepCorrect(step);
       }
@@ -1060,6 +1365,7 @@
         var p = currentProblem();
         var correct = !session.currentWrong;
         uiPhase = "done";
+        renderFractionModel();
         session.results.push(correct);
         addStat(p.type, correct);
         if (correct) {
@@ -1103,6 +1409,9 @@
           var s = document.createElement("span");
           if (i < session.results.length) s.className = session.results[i] ? "done-ok" : "done-ng";
           else if (i === session.idx) s.className = "now";
+          s.setAttribute("aria-label", (i + 1) + "問目：" +
+            (i < session.results.length ? (session.results[i] ? "正解" : "やり直しあり") :
+              (i === session.idx ? "取り組み中" : "これから")));
           dots.appendChild(s);
         });
       }
@@ -1199,7 +1508,8 @@
         var fracPart = '<span class="frac"><span class="f-num">' + slot(built.num, "num") +
           '</span><span class="f-den">' + slot(built.den, "den") + "</span></span>";
         var showWhole = p.type === "mixed" || built.converted || step.id === "convert";
-        return (showWhole ? slot(built.whole, "whole") : "") + fracPart;
+        return built.converted && built.num === 0 ? slot(built.whole, "whole") :
+          (showWhole ? slot(built.whole, "whole") : "") + fracPart;
       }
 
       function renderExampleStep() {
@@ -1331,12 +1641,32 @@
       });
       document.getElementById("btn-next").addEventListener("click", onNext);
       document.getElementById("btn-check").addEventListener("click", checkStep);
+      document.getElementById("fraction-model").addEventListener("click", function (e) {
+        var button = e.target.closest("[data-model-view]");
+        if (!button) return;
+        fractionModelView = button.dataset.modelView;
+        renderFractionModel();
+      });
 
       document.getElementById("step-fields").addEventListener("click", function (e) {
         var fld = e.target.closest(".field");
         if (!fld || uiPhase !== "input") return;
         activeFieldKey = fld.dataset.fkey;
         renderStepFields();
+      });
+
+      // キーボードでも入力・決定できるようにする（タブレットの画面テンキーはそのまま）。
+      document.addEventListener("keydown", function (e) {
+        if (document.getElementById("view-practice").classList.contains("hidden")) return;
+        if (e.altKey || e.ctrlKey || e.metaKey) return;
+        if (/^[0-9]$/.test(e.key)) { e.preventDefault(); pressKey(e.key); }
+        else if (e.key === "Backspace") { e.preventDefault(); pressKey("bs"); }
+        else if (e.key === "Escape") { e.preventDefault(); pressKey("clear"); }
+        else if (e.key === "Enter") {
+          e.preventDefault();
+          if (uiPhase === "input") checkStep();
+          else if (uiPhase === "stepOk" || uiPhase === "done") onNext();
+        }
       });
 
       document.getElementById("keypad").addEventListener("click", function (e) {
