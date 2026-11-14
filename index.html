@@ -450,6 +450,75 @@
         }
       }
 
+
+      /* トップ画面の再設計：選択しやすさと学習状況を優先 */
+      .home-hero-redesign {
+        display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,34%);
+        align-items:center; gap:18px; padding:24px 28px; margin:0 0 18px;
+        border-radius:22px; background:linear-gradient(115deg,#edf5f8 0%,#f7fafb 66%,#e8f1f5 100%);
+        overflow:hidden;
+      }
+      .home-hero-redesign img { width:100%; max-height:190px; object-fit:contain; border-radius:0; box-shadow:none; background:transparent; }
+      .home-welcome h2 { margin:6px 0 8px; font-size:clamp(27px,3.4vw,38px); line-height:1.28; letter-spacing:.01em; color:#203744; }
+      .home-welcome p { margin:0; color:#536875; font-size:16px; }
+      .home-eyebrow,.section-kicker,.focus-kicker { font-size:11px; font-weight:800; letter-spacing:.13em; color:#547382; }
+      .home-mini-stats { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+      .home-mini-stats span { padding:7px 12px; border:1px solid #d5e2e8; border-radius:9px; background:rgba(255,255,255,.72); color:#536875; font-size:13px; }
+      .home-mini-stats strong { color:#203744; font-size:16px; }
+      .focus-card { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:18px 22px; margin-bottom:24px; border:1px solid #cddfe6; border-left:5px solid #367c98; border-radius:16px; background:#fff; box-shadow:0 3px 12px rgba(34,48,58,.05); }
+      .focus-copy { min-width:0; }
+      .focus-copy h3 { margin:3px 0 4px; color:#203744; font-size:21px; }
+      .focus-copy p { margin:0; color:#5d707b; font-size:15px; }
+      .focus-button { flex:none; min-height:52px; padding:10px 18px; border:0; border-radius:11px; color:#fff; background:#2f718c; font-size:16px; font-weight:800; }
+      .focus-button:focus-visible,.type-card button:focus-visible,.sub-card:focus-visible { outline:3px solid #e6a23c; outline-offset:3px; }
+      .home-section-head { display:flex; align-items:end; justify-content:space-between; gap:12px; margin:0 2px 12px; }
+      .home-section-head h3 { margin:2px 0 0; color:#263e4a; font-size:22px; }
+      .home-section-head p { margin:0 0 3px; color:#71818a; font-size:13px; }
+      .menu-redesign { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; align-items:stretch; }
+      .menu-redesign .type-card { min-width:0; padding:17px; border:1px solid var(--line); border-top:4px solid var(--add); border-radius:16px; box-shadow:0 3px 12px rgba(34,48,58,.05); }
+      .menu-redesign .type-card.sub { border-top-color:var(--sub); }
+      .menu-redesign .type-card.mixed { border-top-color:var(--mixed); }
+      .type-card-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:9px; }
+      .type-number { color:#82929a; font-size:12px; font-weight:800; letter-spacing:.08em; }
+      .type-label { padding:3px 7px; border-radius:5px; background:#f0f4f6; color:#687b85; font-size:9px; font-weight:800; letter-spacing:.08em; }
+      .menu-redesign .type-card .t-name { font-size:21px; line-height:1.35; }
+      .menu-redesign .type-card .t-desc { min-height:46px; margin:5px 0 12px; font-size:14px; line-height:1.55; }
+      .menu-redesign .navi-chip { max-width:100%; min-height:42px; gap:7px; padding:4px 9px 4px 5px; font-size:12px; }
+      .menu-redesign .navi-chip .n-face { width:34px; height:34px; }
+      .menu-redesign .navi-chip .n-name { padding:2px 8px; font-size:12px; }
+      .menu-redesign .t-actions { gap:8px; margin-top:13px; }
+      .menu-redesign .t-actions button { flex:1 1 100%; min-height:46px; padding:8px 10px; font-size:15px; border-radius:9px; }
+      .menu-redesign .t-actions button.go-sub { min-height:40px; font-size:13px; border-width:1px; }
+      .sub-menu-redesign { gap:12px; margin-top:14px; }
+      .sub-menu-redesign .sub-card { display:flex; align-items:center; gap:13px; min-height:76px; padding:13px 16px; }
+      .utility-icon { display:grid; place-items:center; flex:none; width:38px; height:38px; border-radius:10px; background:#edf3f5; color:#456575; font-size:22px; font-weight:700; }
+      .utility-copy { display:block; min-width:0; }
+      .sub-menu-redesign .s-name { display:block; margin:0 0 3px; font-size:17px; }
+      .sub-menu-redesign .s-desc { display:block; font-size:13px; line-height:1.4; }
+      @media (max-width:900px) {
+        .menu-redesign { grid-template-columns:1fr; }
+        .menu-redesign .type-card { padding:16px 18px; }
+        .menu-redesign .type-card .t-desc { min-height:0; }
+        .menu-redesign .t-actions { flex-wrap:nowrap; }
+        .menu-redesign .t-actions button { flex:1 1 0; }
+      }
+      @media (max-width:600px) {
+        .home-hero-redesign { grid-template-columns:minmax(0,1fr) 112px; gap:8px; padding:17px 14px; }
+        .home-hero-redesign img { max-height:130px; }
+        .home-welcome h2 { font-size:25px; }
+        .home-welcome p { font-size:13px; }
+        .home-mini-stats { gap:5px; margin-top:10px; }
+        .home-mini-stats span { padding:5px 7px; font-size:11px; }
+        .home-mini-stats strong { font-size:13px; }
+        .focus-card { align-items:flex-start; flex-direction:column; gap:12px; padding:15px; }
+        .focus-copy h3 { font-size:19px; }
+        .focus-copy p { font-size:13px; }
+        .focus-button { width:100%; min-height:48px; }
+        .home-section-head { align-items:flex-start; flex-direction:column; gap:3px; }
+        .home-section-head h3 { font-size:20px; }
+        .home-section-head p { font-size:12px; }
+        .sub-menu-redesign { grid-template-columns:1fr; }
+      }
     </style>
   </head>
   <body>
@@ -462,59 +531,72 @@
         <p class="head-note">分母が 同じ 分数の 計算を、ステップで 確かめながら 解こう。1回 10問です。</p>
       </header>
 
-      <!-- トップ画面 -->
+      <!-- トップ画面：今日の学びを選ぶ -->
       <section id="view-home">
-        <div class="home-hero">
+        <div class="home-hero home-hero-redesign">
+          <div class="home-welcome">
+            <span class="home-eyebrow">4年生・算数 / FRACTION LAB</span>
+            <h2>分数の計算に<br>チャレンジしよう！</h2>
+            <p>図で見て、ステップで考えて、自分の力で答えまで。</p>
+            <div class="home-mini-stats">
+              <span><strong id="home-total">0</strong> 問チャレンジ</span>
+              <span><strong id="home-accuracy">—</strong> 正答率</span>
+            </div>
+          </div>
           <img id="topScene" src="https://tt-sensei.github.io/navi-character-/assets/groups/learning/trio-learning-discussion-riku-saku-kai.png" alt="算数を いっしょに 考える ナビキャラたち" />
-          <script>
-            // トップ絵は3人の場面イラストからランダム表示（開くたびに変わる）
-            (function () {
-              var scenes = [
-                "https://tt-sensei.github.io/navi-character-/assets/groups/learning/trio-learning-discussion-riku-saku-kai.png",
-                "https://tt-sensei.github.io/navi-character-/assets/groups/learning/trio-learning-graph-kai-tsuki-nami.png"
-              ];
-              var img = document.getElementById("topScene");
-              if (img) img.src = scenes[Math.floor(Math.random() * scenes.length)];
-            })();
-          </script>
         </div>
-        <div class="menu">
+        <div class="focus-card" id="focus-card">
+          <div class="focus-copy">
+            <span class="focus-kicker">YOUR NEXT STEP</span>
+            <h3 id="focus-title">今日のおすすめ</h3>
+            <p id="focus-desc">練習の記録から、今の自分に合った問題を集めるよ。</p>
+          </div>
+          <button id="btn-focus" class="focus-button">おすすめ練習をする <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="home-section-head">
+          <div><span class="section-kicker">PRACTICE MENU</span><h3>練習する内容を選ぼう</h3></div>
+          <p>れいだいを見てから始めてもOK！</p>
+        </div>
+        <div class="menu menu-redesign">
           <div class="type-card add">
+            <div class="type-card-top"><span class="type-number">01</span><span class="type-label">ADD</span></div>
             <p class="t-name">分数の たし算</p>
-            <p class="t-desc">分母が 同じ 分数どうしの たし算。答えが 1より 大きくなる 問題も あるよ。</p>
-            <span class="navi-chip add"><img class="n-face" src="https://tt-sensei.github.io/navi-character-/assets/web/characters/saku/expressions/01-normal-smile.webp" alt="" /><span class="n-name">さく</span>ぶんぼは そのまま、ぶんしを たすよ</span>
+            <p class="t-desc">分母はそのまま。分子をたそう。1になる計算にも挑戦！</p>
+            <span class="navi-chip add"><img class="n-face" src="https://tt-sensei.github.io/navi-character-/assets/web/characters/saku/expressions/01-normal-smile.webp" alt="" /><span class="n-name">さく</span>分母はそのまま、分子をたすよ</span>
             <div class="t-actions">
-              <button class="go-main" data-start="add">れんしゅうする →</button>
-              <button class="go-sub" data-example="add">れいだいを いっしょに</button>
+              <button class="go-main" data-start="add">練習する →</button>
+              <button class="go-sub" data-example="add">れいだいを見る</button>
             </div>
           </div>
           <div class="type-card sub">
+            <div class="type-card-top"><span class="type-number">02</span><span class="type-label">SUBTRACT</span></div>
             <p class="t-name">分数の ひき算</p>
-            <p class="t-desc">分母が 同じ 分数どうしの ひき算。</p>
-            <span class="navi-chip sub"><img class="n-face" src="https://tt-sensei.github.io/navi-character-/assets/web/characters/nami/expressions/01-normal-smile.webp" alt="" /><span class="n-name">なみ</span>ぶんぼは そのまま、ぶんしを ひくよ</span>
+            <p class="t-desc">分母はそのまま。分子の差を考えて答えよう。</p>
+            <span class="navi-chip sub"><img class="n-face" src="https://tt-sensei.github.io/navi-character-/assets/web/characters/nami/expressions/01-normal-smile.webp" alt="" /><span class="n-name">なみ</span>分子どうしをひくよ</span>
             <div class="t-actions">
-              <button class="go-main" data-start="sub">れんしゅうする →</button>
-              <button class="go-sub" data-example="sub">れいだいを いっしょに</button>
+              <button class="go-main" data-start="sub">練習する →</button>
+              <button class="go-sub" data-example="sub">れいだいを見る</button>
             </div>
           </div>
           <div class="type-card mixed">
+            <div class="type-card-top"><span class="type-number">03</span><span class="type-label">MIXED</span></div>
             <p class="t-name">帯分数の 計算</p>
-            <p class="t-desc">帯分数が 入る たし算・ひき算。整数の 部分と 分数の 部分を 分けて、ステップで 解くよ。</p>
-            <span class="navi-chip mixed"><img class="n-face" src="https://tt-sensei.github.io/navi-character-/assets/web/characters/kai/expressions/01-normal-smile.webp" alt="" /><span class="n-name">かい</span>整数の 部分と 分数の 部分を 分けて 考えるよ</span>
+            <p class="t-desc">整数と分数に分けて考える。くり上がり・くり下がりにも挑戦！</p>
+            <span class="navi-chip mixed"><img class="n-face" src="https://tt-sensei.github.io/navi-character-/assets/web/characters/kai/expressions/01-normal-smile.webp" alt="" /><span class="n-name">かい</span>分けて考えると解きやすいよ</span>
             <div class="t-actions">
-              <button class="go-main" data-start="mixed">れんしゅうする →</button>
-              <button class="go-sub" data-example="mixed">れいだいを いっしょに</button>
+              <button class="go-main" data-start="mixed">練習する →</button>
+              <button class="go-sub" data-example="mixed">れいだいを見る</button>
             </div>
           </div>
         </div>
-        <div class="sub-menu">
+        <div class="sub-menu sub-menu-redesign">
           <button class="sub-card" id="btn-tokkun">
-            <p class="s-name">とっくん（まちがい直し）<span class="count-badge" id="tokkun-count">0</span></p>
-            <p class="s-desc" id="tokkun-desc">まちがえた 問題に もう一度 ちょうせん。正解すると 記録が 消えるよ。</p>
+            <span class="utility-icon" aria-hidden="true">↻</span>
+            <span class="utility-copy"><span class="s-name">まちがい直し <span class="count-badge" id="tokkun-count">0</span></span><span class="s-desc" id="tokkun-desc">まちがえた問題を、もう一度解いてみよう。</span></span>
           </button>
           <button class="sub-card" id="btn-records">
-            <p class="s-name">練習の 記録</p>
-            <p class="s-desc">種類ごとに、解いた 問題数と 正解数を 見られるよ。</p>
+            <span class="utility-icon" aria-hidden="true">▤</span>
+            <span class="utility-copy"><span class="s-name">学習の記録</span><span class="s-desc">取り組んだ数と、計算パターンごとの理解を確認。</span></span>
           </button>
         </div>
       </section>
@@ -725,6 +807,31 @@
         s[type].total += 1;
         if (correct) s[type].correct += 1;
         saveJSON(KEY_STATS, s);
+      }
+      var KEY_PATTERN_STATS = "bunsuRenshu4.patternStats.v1";
+      function loadPatternStats() {
+        var s = loadJSON(KEY_PATTERN_STATS, {});
+        return s && typeof s === "object" ? s : {};
+      }
+      function addPatternStat(category, correct) {
+        var s = loadPatternStats();
+        if (!s[category]) s[category] = { total: 0, correct: 0 };
+        s[category].total += 1;
+        if (correct) s[category].correct += 1;
+        saveJSON(KEY_PATTERN_STATS, s);
+      }
+      function weakestPattern() {
+        var s = loadPatternStats(), weakest = null;
+        Object.keys(s).forEach(function (category) {
+          var item = s[category];
+          if (!item || item.total < 2) return;
+          var rate = item.correct / item.total;
+          if (rate >= 0.8) return;
+          if (!weakest || rate < weakest.rate || (rate === weakest.rate && item.total > weakest.total)) {
+            weakest = { category: category, rate: rate, total: item.total, correct: item.correct };
+          }
+        });
+        return weakest;
       }
 
       /* ---------- 設定（音の ON/OFF を この端末に 保存） ---------- */
@@ -1079,6 +1186,31 @@
         show("practice");
         renderProblem();
       }
+      function startFocus() {
+        var weak = weakestPattern();
+        if (!weak) { startNormal("mixed"); return; }
+        var type = weak.category.indexOf("たし算") === 0 ? "mixed" :
+          (weak.category.indexOf("ひき算") === 0 ? "mixed" :
+            (weak.category.indexOf("より小さい") >= 0 || weak.category.indexOf("になる") >= 0 || weak.category.indexOf("より大きい") >= 0 ? "add" : "sub"));
+        var queue = [], seen = Object.create(null);
+        for (var i = 0; i < 10; i++) {
+          var found = null;
+          for (var tries = 0; tries < 900; tries++) {
+            var candidate = makeProblem(type);
+            var sig = problemSignature(candidate);
+            if (questionCategory(candidate) === weak.category && !seen[sig]) {
+              found = candidate; seen[sig] = true; break;
+            }
+          }
+          if (!found) break;
+          queue.push(found);
+        }
+        if (queue.length < 4) { startNormal(type); return; }
+        session = { mode: "focus", type: type, focusCategory: weak.category, queue: queue, idx: 0, results: [], addedMistakes: 0 };
+        playSound("start");
+        show("practice");
+        renderProblem();
+      }
 
       function currentProblem() { return session.queue[session.idx]; }
       function currentStep() { return session.steps[session.stepIdx]; }
@@ -1093,7 +1225,8 @@
         session.built = { den: null, num: null, whole: null, converted: false };
 
         document.getElementById("practice-type-name").textContent =
-          session.mode === "tokkun" ? "とっくん（まちがい直し）" : meta.name;
+          session.mode === "tokkun" ? "とっくん（まちがい直し）" :
+          (session.mode === "focus" ? "おすすめ練習：" + session.focusCategory : meta.name);
         var chip = document.getElementById("practice-chip");
         chip.className = "navi-chip " + p.type;
         document.getElementById("practice-navi-name").textContent = meta.navi;
@@ -1332,7 +1465,7 @@
         if (!session.currentWrong) {
           session.currentWrong = true;
           // 途中で 1回でも 間違えたら、その問題は「まちがえた問題」として記録する
-          if (session.mode === "normal" && !session.countedMistake) {
+          if ((session.mode === "normal" || session.mode === "focus") && !session.countedMistake) {
             recordMistake(p);
             session.countedMistake = true;
             session.addedMistakes += 1;
@@ -1399,6 +1532,7 @@
         renderFractionModel();
         session.results.push(correct);
         addStat(p.type, correct);
+        addPatternStat(questionCategory(p), correct);
         if (correct) {
           removeMistake(p); // ステップを 間違えずに 解けたら 克服
           if (session.mode === "tokkun") session.cleared += 1;
@@ -1624,8 +1758,20 @@
         var n = loadMistakes().length;
         document.getElementById("tokkun-count").textContent = n;
         document.getElementById("tokkun-desc").textContent = n > 0 ?
-          "まちがえた 問題に もう一度 ちょうせん。正解すると 記録が 消えるよ。" :
-          "まちがえた 問題は まだ ないよ。れんしゅうで まちがえると ここに たまるよ。";
+          "まちがえた問題が " + n + " 問あるよ。正解すると記録から消えるよ。" :
+          "まちがえた問題はまだないよ。練習するとここに記録されるよ。";
+        var stats = loadStats(), total = 0, correct = 0;
+        ["add", "sub", "mixed"].forEach(function (type) {
+          total += stats[type].total; correct += stats[type].correct;
+        });
+        document.getElementById("home-total").textContent = total;
+        document.getElementById("home-accuracy").textContent = total ? Math.round(correct / total * 100) + "%" : "—";
+        var weak = weakestPattern();
+        document.getElementById("focus-title").textContent = weak ? "今のおすすめ：" + weak.category : "自分に合った練習を始めよう";
+        document.getElementById("focus-desc").textContent = weak ?
+          weak.total + " 回の記録から、正答率 " + Math.round(weak.rate * 100) + "% の計算パターンを集めたよ。" :
+          "取り組んだ記録がたまると、苦手な計算パターンを見つけて問題を集めるよ。まずは帯分数の計算に挑戦！";
+        document.getElementById("btn-focus").innerHTML = weak ? "この計算を練習する <span aria-hidden=\"true\">→</span>" : "帯分数の練習をする <span aria-hidden=\"true\">→</span>";
       }
 
       /* ---------- イベント ---------- */
@@ -1650,8 +1796,10 @@
         settings.sound = !settings.sound;
         saveSettings();
         renderSoundBtn();
+      refreshHome();
         if (settings.sound) playSound("decide");
       });
+      document.getElementById("btn-focus").addEventListener("click", startFocus);
       document.getElementById("btn-tokkun").addEventListener("click", function () {
         if (loadMistakes().length === 0) {
           document.getElementById("tokkun-desc").textContent = "まちがえた 問題は まだ ないよ。先に れんしゅうを してみよう。";
