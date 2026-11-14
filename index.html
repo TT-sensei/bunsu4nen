@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light" />
     <link rel="icon" href="data:," />
     <link rel="stylesheet" href="https://tt-sensei.github.io/edu-effects/css/edu-effects-library.css" />
-    <title>4年 分数の計算練習（試作）</title>
+    <title>4年 分数の計算練習</title>
     <style>
       :root {
         --bg: #eef4f6;
@@ -425,6 +425,28 @@
         #view-practice .model-whole { min-height: 6px; gap: 1px; }
         #view-practice .model-bars { gap: 2px; }
         #view-practice #dots { margin: 2px 0 1px; }
+        header.app-head .head-note { display: none; }
+        header.app-head { margin-bottom: 4px; }
+        #view-home .home-hero-redesign { padding: 14px 22px; margin-bottom: 10px; }
+        #view-home .home-hero-redesign img { max-height: 148px; }
+        #view-home .home-welcome h2 { font-size: 31px; margin: 4px 0 6px; }
+        #view-home .home-mini-stats { margin-top: 10px; }
+        #view-home .home-mini-stats span { padding: 5px 12px; }
+        #view-home .focus-card { padding: 13px 18px; margin-bottom: 12px; }
+        #view-home .focus-copy h3 { margin: 2px 0 2px; font-size: 20px; }
+        #view-home .focus-button { min-height: 48px; }
+        #view-home .home-section-head { margin: 0 2px 6px; }
+        #view-home .home-section-head h3 { font-size: 20px; margin-top: 0; }
+        #view-home .type-card { padding: 13px 14px; }
+        #view-home .type-card .t-name { font-size: 22px; margin: 0 0 2px; }
+        #view-home .type-card .t-desc { min-height: 2.6em; font-size: 15px; line-height: 1.45; }
+        #view-home .navi-chip .n-face { width: 34px; height: 34px; }
+        #view-home .t-actions { margin-top: 8px; }
+        #view-home .t-actions button { min-height: 50px; }
+        #view-home .sub-menu { margin-top: 10px; }
+        #view-home .sub-card { min-height: 74px; }
+        #view-home .menu-redesign .t-actions button { flex: 1 1 0; }
+        #view-home .menu-redesign .t-actions button.go-sub { min-height: 50px; font-size: 15px; border-width: 2px; }
         #view-practice .model-label { line-height: 1.2; }
         #view-practice .slot { min-height: 46px; }
         #view-practice .model-heading { margin-bottom: 4px; font-size: 14px; }
@@ -561,7 +583,6 @@
       <header class="app-head">
         <h1>分数の計算練習</h1>
         <span class="grade-tag">4年生・算数</span>
-        <span class="trial-tag">試作</span>
         <button class="sound-toggle" id="btn-sound" aria-pressed="true">🔊 音 ON</button>
         <p class="head-note">分母が 同じ 分数の 計算を、ステップで 確かめながら 解こう。1回 10問です。</p>
       </header>
