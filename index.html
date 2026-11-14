@@ -291,6 +291,111 @@
       .reset-btn.confirm { background: var(--ng); color: #fff; }
       .section-title { font-size: 24px; font-weight: 800; margin: 0 0 6px; }
       .section-note { color: var(--ink-soft); font-size: 16px; margin: 0 0 10px; }
+    
+      /* ---------- タブレット最適化：横画面・タッチ操作 ---------- */
+      button, [role="button"] { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+      button:focus-visible, [role="button"]:focus-visible {
+        outline: 4px solid #f0b429; outline-offset: 3px;
+      }
+      button:disabled { cursor: not-allowed; }
+      .type-card, .sub-card, .back-btn, .sound-toggle, .keypad button,
+      .check-btn, .next-btn, .btn-row button { touch-action: manipulation; }
+      .field { user-select: none; -webkit-user-select: none; }
+      @media (min-width: 760px) {
+        .wrap { max-width: 1120px; padding: 16px 22px 28px; }
+        header.app-head { gap: 12px; margin-bottom: 14px; }
+        header.app-head h1 { font-size: 28px; }
+        .head-note { width: auto; flex: 1 1 100%; }
+        .menu { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+        .type-card { padding: 18px; }
+        .type-card .t-name { font-size: 23px; }
+        .type-card .t-desc { min-height: 3.2em; font-size: 16px; }
+        .navi-chip { font-size: 14px; padding-right: 10px; gap: 7px; }
+        .navi-chip .n-face { width: 38px; height: 38px; }
+        .navi-chip .n-name { font-size: 14px; padding: 2px 9px; }
+        .t-actions { gap: 8px; }
+        .t-actions button { flex-basis: 130px; min-height: 58px; font-size: 17px; }
+        .sub-menu { margin-top: 14px; }
+        .sub-card { min-height: 88px; }
+      }
+      @media (min-width: 760px) and (orientation: landscape) {
+        body { min-height: 100dvh; }
+        .wrap { max-width: 1280px; padding: 10px 20px 18px; }
+        header.app-head { margin-bottom: 8px; }
+        header.app-head h1 { font-size: 25px; }
+        .head-note { font-size: 14px; margin-top: 0; }
+        .practice-top { margin-bottom: 8px; }
+        #view-practice .card {
+          display: grid;
+          grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+          grid-template-areas:
+            "heading heading"
+            "progress progress"
+            "problem steps"
+            "builder steps"
+            "keypad steps"
+            "check feedback";
+          column-gap: 26px;
+          row-gap: 5px;
+          align-items: start;
+          padding: 16px 22px;
+        }
+        #view-practice .card > div:first-child { grid-area: heading; }
+        #view-practice #dots { grid-area: progress; margin: 4px 0 2px; }
+        #view-practice #problem {
+          grid-area: problem; align-self: end;
+          min-height: 116px; padding: 8px 8px 2px; font-size: 42px;
+        }
+        #view-practice .builder-wrap {
+          grid-area: builder; margin: 0; align-self: start;
+          padding: 4px 8px 10px;
+        }
+        #view-practice .builder { min-height: 76px; font-size: 38px; }
+        #view-practice .builder .frac { font-size: 38px; }
+        #view-practice .step-panel {
+          grid-area: steps; margin: 0; padding: 10px 0 0 18px;
+          border-top: 0; border-left: 2px dashed var(--line);
+          min-width: 0; align-self: stretch;
+        }
+        #view-practice .step-title { font-size: 21px; }
+        #view-practice .step-reason { font-size: 15px; margin-top: 5px; }
+        #view-practice .step-note { font-size: 16px; margin-top: 8px; }
+        #view-practice .step-expr { font-size: 22px; margin-top: 8px; }
+        #view-practice .step-fields { margin-top: 8px; gap: 12px; }
+        #view-practice .field { width: 112px; min-height: 62px; font-size: 34px; }
+        #view-practice #keypad {
+          grid-area: keypad; width: min(100%, 390px);
+          margin: 4px auto 0; gap: 7px;
+        }
+        #view-practice .keypad button { min-height: 48px; font-size: 24px; border-radius: 12px; }
+        #view-practice .keypad button.util { font-size: 16px; }
+        #view-practice #btn-check {
+          grid-area: check; width: min(100%, 390px);
+          margin: 5px auto 0; min-height: 54px; font-size: 20px;
+        }
+        #view-practice #feedback {
+          grid-area: feedback; margin-top: 5px; padding: 12px 14px;
+          font-size: 15px; min-width: 0;
+        }
+        #view-practice .feedback .f-title { font-size: 20px; }
+        #view-practice .next-btn { min-height: 50px; margin-top: 8px; font-size: 18px; }
+      }
+      @media (max-width: 759px) {
+        .wrap { padding: 12px 12px 28px; }
+        .card { padding: 18px 14px; }
+        .problem { font-size: clamp(32px, 8vw, 44px); }
+        .keypad { gap: 8px; }
+        .keypad button { min-height: 60px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          scroll-behavior: auto !important;
+          animation-duration: .01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: .01ms !important;
+        }
+      }
+
     </style>
   </head>
   <body>
