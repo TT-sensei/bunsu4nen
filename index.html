@@ -995,9 +995,37 @@
       var stepInput = {};
       var activeFieldKey = null;
 
+      function problemSignature(p) {
+        var parts = p.terms.map(function (t) {
+          return (t.w || 0) + ":" + t.n + "/" + t.d;
+        });
+        if (p.op === "+") parts.sort(); // たし算は順番が違っても同じ問題として扱う
+        return p.type + "|" + p.op + "|" + parts.join("|");
+      }
+
+      function makeQuestionQueue(type, count) {
+        var queue = [], seen = Object.create(null);
+        for (var i = 0; i < count; i++) {
+          var candidate = null;
+          // 同じ10問の中で、同じ問題が重ならないようにする
+          for (var attempt = 0; attempt < 80; attempt++) {
+            var next = makeProblem(type);
+            var key = problemSignature(next);
+            if (!seen[key]) {
+              candidate = next;
+              seen[key] = true;
+              break;
+            }
+          }
+          // 問題の種類を増やせない場合も、練習が止まらないよう最後は採用する
+          if (!candidate) candidate = makeProblem(type);
+          queue.push(candidate);
+        }
+        return queue;
+      }
+
       function startNormal(type) {
-        var queue = [];
-        for (var i = 0; i < SESSION_LEN; i++) queue.push(makeProblem(type));
+        var queue = makeQuestionQueue(type, SESSION_LEN);
         session = { mode: "normal", type: type, queue: queue, idx: 0, results: [], addedMistakes: 0 };
         playSound("start");
         show("practice");
