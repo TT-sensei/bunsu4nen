@@ -1796,7 +1796,6 @@
         settings.sound = !settings.sound;
         saveSettings();
         renderSoundBtn();
-      refreshHome();
         if (settings.sound) playSound("decide");
       });
       document.getElementById("btn-focus").addEventListener("click", startFocus);
@@ -1858,7 +1857,9 @@
         if (this.dataset.armed === "1") {
           saveJSON(KEY_MISTAKES, []);
           saveJSON(KEY_STATS, { add: { total: 0, correct: 0 }, sub: { total: 0, correct: 0 }, mixed: { total: 0, correct: 0 } });
+          saveJSON(KEY_PATTERN_STATS, {});
           renderRecords();
+          refreshHome();
         } else {
           this.dataset.armed = "1";
           this.textContent = "ほんとうに 消す？ もう一度 おしてね";
