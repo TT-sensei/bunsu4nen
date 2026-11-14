@@ -1221,7 +1221,7 @@
           queue.push(found);
         }
         if (queue.length < 4) { startNormal(type); return; }
-        session = { mode: "focus", type: type, focusCategory: weak.category, queue: queue, idx: 0, results: [], addedMistakes: 0 };
+        session = { mode: "focus", focusStage: "practice", type: type, focusCategory: weak.category, queue: queue, idx: 0, results: [], addedMistakes: 0, practiceSignatures: queue.map(problemSignature) };
         playSound("start");
         show("practice");
         renderProblem();
@@ -1606,7 +1606,26 @@
         var again = document.getElementById("btn-again");
         var poseImg = document.getElementById("result-pose");
         document.getElementById("btn-result-home").classList.toggle("hidden", session.mode === "tokkun");
-        if (session.mode === "tokkun") {
+        if (session.mode === "focus") {
+          poseImg.src = naviPose(session.type, ok >= Math.ceil(total * 0.8) ? "correct" : "complete");
+          playSound(ok >= Math.ceil(total * 0.8) ? "allclear" : "practice");
+          title.textContent = session.focusStage === "practice" ? "とっくん練習の けっか" : "できるように なったかな？";
+          score.textContent = ok + " / " + total + " もん せいかい";
+          if (session.focusStage === "practice") {
+            msg.textContent = "ここまで よく がんばったね。";
+            note.textContent = "少し形を変えた問題で、できるようになったか確かめよう。";
+            again.textContent = "確認問題に ちょうせん";
+            again.dataset.action = "confirm";
+          } else {
+            var mastered = ok >= Math.ceil(total * 0.8);
+            msg.textContent = mastered ? "この計算パターンが できるように なってきたね！" : "あと少し！もう一度 練習してみよう。";
+            note.textContent = mastered ?
+              "別の問題でも力を発揮できたよ。学習の記録にも反映されたよ。" :
+              "確認問題でまちがえた問題は、とっくんにも記録されたよ。くり返し取り組もう。";
+            again.textContent = mastered ? "トップへ もどる" : "もう一度 練習する";
+            again.dataset.action = mastered ? "home" : "focus-again";
+          }
+        } else if (session.mode === "tokkun") {
           var lastType = session.queue[session.queue.length - 1].type;
           var remaining = loadMistakes().length;
           poseImg.src = naviPose(lastType,
@@ -1851,8 +1870,39 @@
       document.getElementById("btn-quit").addEventListener("click", function () { refreshHome(); show("home"); });
       document.getElementById("btn-result-home").addEventListener("click", function () { refreshHome(); show("home"); });
       document.getElementById("btn-again").addEventListener("click", function () {
-        if (this.dataset.action === "again" && session) startNormal(session.type);
-        else { refreshHome(); show("home"); }
+        if (!session) { refreshHome(); show("home"); return; }
+        if (this.dataset.action === "again") { startNormal(session.type); return; }
+        if (this.dataset.action === "confirm") {
+          var queue = [], seen = Object.create(null);
+          session.practiceSignatures.forEach(function (sig) { seen[sig] = true; });
+          for (var i = 0; i < 3; i++) {
+            var found = null;
+            for (var tries = 0; tries < 1200; tries++) {
+              var candidate = makeProblem(session.type);
+              var sig = problemSignature(candidate);
+              if (questionCategory(candidate) === session.focusCategory && !seen[sig]) {
+                found = candidate; seen[sig] = true; break;
+              }
+            }
+            if (found) queue.push(found);
+          }
+          if (queue.length < 2) {
+            this.textContent = "トップへ もどる";
+            this.dataset.action = "home";
+            document.getElementById("result-note").textContent = "確認問題を十分に用意できなかったよ。別の練習に進もう。";
+            return;
+          }
+          session.focusStage = "confirm";
+          session.queue = queue;
+          session.idx = 0;
+          session.results = [];
+          playSound("start");
+          show("practice");
+          renderProblem();
+          return;
+        }
+        if (this.dataset.action === "focus-again") { startFocus(); return; }
+        refreshHome(); show("home");
       });
       document.getElementById("btn-next").addEventListener("click", onNext);
       document.getElementById("btn-check").addEventListener("click", checkStep);
