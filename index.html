@@ -316,6 +316,9 @@
       .model-unit.filled.sub { background: #8bc5dc; border-color: #22708f; }
       .model-unit.filled.answer { background: #91cda0; border-color: #35824a; }
       .model-unit.filled.borrow { background:#f7d98a; border-color:#b88719; }
+      @media (min-width:760px) {
+        .model-switch button { min-height:42px; padding:6px 14px; font-size:14px; }
+      }
       .model-note { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
       .model-row + .model-note { padding-top: 5px; border-top: 1px solid var(--line); }
       .model-value { font-size: 13px; }
@@ -1277,7 +1280,9 @@
         if (nextLabel) { nb.classList.remove("hidden"); nb.textContent = nextLabel; }
         else nb.classList.add("hidden");
         // 横向きタブレットでは画面内に配置しているため、不要な自動スクロールをしない。
-        if (window.innerWidth < 760) fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        var tabletLandscape = window.matchMedia &&
+          window.matchMedia("(min-width: 760px) and (orientation: landscape)").matches;
+        if (!tabletLandscape) fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
 
       function checkStep() {
@@ -1404,6 +1409,9 @@
           var s = document.createElement("span");
           if (i < session.results.length) s.className = session.results[i] ? "done-ok" : "done-ng";
           else if (i === session.idx) s.className = "now";
+          s.setAttribute("aria-label", (i + 1) + "問目：" +
+            (i < session.results.length ? (session.results[i] ? "正解" : "やり直しあり") :
+              (i === session.idx ? "取り組み中" : "これから")));
           dots.appendChild(s);
         });
       }
