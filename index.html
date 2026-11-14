@@ -1017,22 +1017,48 @@
         return p.type + "|" + p.op + "|" + parts.join("|");
       }
 
+      function questionCategory(p) {
+        var d = p.ansD, a = p.terms[0], b = p.terms[1];
+        if (p.type === "add") {
+          var sum = a.n + b.n;
+          return sum < d ? "1より小さい" : (sum === d ? "1になる" : "1より大きい");
+        }
+        if (p.type === "sub") {
+          var diff = a.n - b.n;
+          return diff <= d / 3 ? "差が小さい" : (diff >= d * 2 / 3 ? "差が大きい" : "差が中くらい");
+        }
+        if (p.op === "+") return a.n + b.n >= d ? "たし算・くり上がり" : "たし算・くり上がりなし";
+        return a.n < b.n ? "ひき算・くり下がり" : "ひき算・くり下がりなし";
+      }
+
       function makeQuestionQueue(type, count) {
-        var queue = [], seen = Object.create(null);
+        var queue = [], seen = Object.create(null), categoryCounts = Object.create(null);
+        // 10問を同じ計算パターンに偏らせず、異なる考え方を練習できるようにする
         for (var i = 0; i < count; i++) {
-          var candidate = null;
-          // 同じ10問の中で、同じ問題が重ならないようにする
-          for (var attempt = 0; attempt < 80; attempt++) {
+          var candidate = null, candidateKey = "", candidateCategory = "";
+          var leastCount = Infinity;
+          for (var attempt = 0; attempt < 180; attempt++) {
             var next = makeProblem(type);
             var key = problemSignature(next);
-            if (!seen[key]) {
+            if (seen[key]) continue;
+            var category = questionCategory(next);
+            var used = categoryCounts[category] || 0;
+            if (used < leastCount) {
               candidate = next;
-              seen[key] = true;
-              break;
+              candidateKey = key;
+              candidateCategory = category;
+              leastCount = used;
+              if (used === 0) break;
             }
           }
-          // 問題の種類を増やせない場合も、練習が止まらないよう最後は採用する
-          if (!candidate) candidate = makeProblem(type);
+          // 生成できる問題が限られる場合も、練習を止めずに続ける
+          if (!candidate) {
+            candidate = makeProblem(type);
+            candidateKey = problemSignature(candidate);
+            candidateCategory = questionCategory(candidate);
+          }
+          seen[candidateKey] = true;
+          categoryCounts[candidateCategory] = (categoryCounts[candidateCategory] || 0) + 1;
           queue.push(candidate);
         }
         return queue;
@@ -1312,12 +1338,17 @@
             session.addedMistakes += 1;
           }
         }
-        step.fields.forEach(function (f) { stepInput[f.key] = ""; });
+        var retained = 0;
+        step.fields.forEach(function (f) {
+          if (stepInput[f.key] !== "" && parseInt(stepInput[f.key], 10) === f.expect) retained += 1;
+          else stepInput[f.key] = "";
+        });
         renderStepFields();
         setPracticeFace(FACE_CHEER);
         playSound("softFail");
         fxPlay(document.getElementById("step-fields"), "effect-wrong-shake");
-        showFeedback("ng", "× もう一度 考えよう", "<p>" + step.wrong + "</p>", null);
+        var keepMessage = retained > 0 ? "<p>正しく 入れられた わくは そのままで いいよ。</p>" : "";
+        showFeedback("ng", "× もう一度 考えよう", keepMessage + "<p>" + step.wrong + "</p>", null);
       }
 
       function setPracticeFace(expr) {
