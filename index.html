@@ -519,6 +519,16 @@
         .home-section-head p { font-size:12px; }
         .sub-menu-redesign { grid-template-columns:1fr; }
       }
+
+      .pattern-record-section { margin:20px 0 16px; padding:16px 0 4px; border-top:1px solid var(--line); }
+      .pattern-record-section h3 { margin:0 0 4px; font-size:18px; color:var(--ink); }
+      .pattern-record-section > p,.pattern-empty { margin:0 0 12px; color:var(--ink-soft); font-size:14px; }
+      .pattern-record-row { padding:10px 0; border-bottom:1px solid #edf1f3; }
+      .pattern-record-head { display:flex; justify-content:space-between; gap:12px; align-items:center; font-size:14px; }
+      .pattern-record-head strong { color:#314a56; }
+      .pattern-record-head span { color:#647781; white-space:nowrap; font-size:12px; }
+      .pattern-track { height:8px; margin-top:7px; border-radius:99px; background:#e9eff2; overflow:hidden; }
+      .pattern-track span { display:block; height:100%; border-radius:99px; background:#4b8a76; }
     </style>
   </head>
   <body>
@@ -723,6 +733,11 @@
           <p class="section-title">練習の 記録</p>
           <p class="section-note">この タブレットに 保存されている 記録です。</p>
           <div id="record-list"></div>
+          <div class="pattern-record-section">
+            <h3>計算パターンごとの記録</h3>
+            <p>取り組んだ回数が増えると、得意・練習中のパターンが見えてくるよ。</p>
+            <div id="pattern-record-list"></div>
+          </div>
           <div class="record-row">
             <div class="r-head">
               <span class="r-name">とっくん待ちの 問題</span>
@@ -1747,6 +1762,28 @@
             '<div class="bar ' + t + '"><div style="width:' + pct + '%"></div></div>';
           list.appendChild(row);
         });
+        var patternHost = document.getElementById("pattern-record-list");
+        patternHost.innerHTML = "";
+        var patternStats = loadPatternStats();
+        var patternRows = Object.keys(patternStats).map(function (category) {
+          var item = patternStats[category];
+          return { category: category, total: item.total || 0, correct: item.correct || 0,
+            rate: item.total ? item.correct / item.total : 0 };
+        }).sort(function (a, b) { return a.rate - b.rate || b.total - a.total; });
+        if (!patternRows.length) {
+          patternHost.innerHTML = '<p class="pattern-empty">まだパターン別の記録はないよ。まずは練習してみよう。</p>';
+        } else {
+          patternRows.forEach(function (item) {
+            var row = document.createElement("div");
+            row.className = "pattern-record-row";
+            var rate = Math.round(item.rate * 100);
+            var status = item.total < 2 ? "記録中" : (rate >= 80 ? "定着" : "練習中");
+            row.innerHTML = '<div class="pattern-record-head"><strong>' + item.category + '</strong><span>' +
+              item.correct + '/' + item.total + ' 正解 ・ ' + status + '</span></div>' +
+              '<div class="pattern-track"><span style="width:' + rate + '%"></span></div>';
+            patternHost.appendChild(row);
+          });
+        }
         document.getElementById("record-tokkun").textContent = loadMistakes().length + " もん";
         var rb = document.getElementById("btn-reset");
         rb.textContent = "記録を 全部 消す";
