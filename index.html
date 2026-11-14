@@ -320,6 +320,7 @@
         .model-switch button { min-height:42px; padding:6px 14px; font-size:14px; }
       }
       .model-note { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+      .session-note { flex: 1 1 100%; margin: 2px 0 0; padding: 8px 12px; border-radius: 10px; background: #fff6df; border: 1px solid #ecd9a0; font-size: 15px; font-weight: 700; color: #7a5b12; }
       .model-row + .model-note { padding-top: 5px; border-top: 1px solid var(--line); }
       .model-value { font-size: 13px; }
       #feedback[aria-live="polite"] { min-height: 0; }
@@ -340,8 +341,8 @@
             "keypad steps"
             "check feedback";
         }
-        #view-practice .fraction-model { grid-area: visual; margin: 0 8px 4px; padding: 8px 12px; }
-        #view-practice .model-unit { height: 14px; }
+        #view-practice .fraction-model { grid-area: visual; margin: 0 8px 2px; padding: 5px 12px; }
+        #view-practice .model-unit { height: 10px; }
         #view-practice .model-row { grid-template-columns: 70px minmax(0,1fr); }
       }
 
@@ -373,11 +374,11 @@
       }
       @media (min-width: 760px) and (orientation: landscape) {
         body { min-height: 100dvh; }
-        .wrap { max-width: 1280px; padding: 10px 20px 18px; }
-        header.app-head { margin-bottom: 8px; }
+        .wrap { max-width: 1280px; padding: 8px 20px 6px; }
+        header.app-head { margin-bottom: 6px; }
         header.app-head h1 { font-size: 25px; }
         .head-note { font-size: 14px; margin-top: 0; }
-        .practice-top { margin-bottom: 8px; }
+        .practice-top { margin-bottom: 4px; }
         #view-practice .card {
           display: grid;
           grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
@@ -390,22 +391,46 @@
             "keypad steps"
             "check feedback";
           column-gap: 26px;
-          row-gap: 5px;
+          row-gap: 2px;
           align-items: start;
-          padding: 16px 22px;
+          padding: 9px 20px;
         }
         #view-practice .card > div:first-child { grid-area: heading; }
         #view-practice #dots { grid-area: progress; margin: 4px 0 2px; }
         #view-practice #problem {
           grid-area: problem; align-self: end;
-          min-height: 116px; padding: 8px 8px 2px; font-size: 42px;
+          min-height: 76px; padding: 2px 8px 0; font-size: 36px;
         }
         #view-practice .builder-wrap {
           grid-area: builder; margin: 0; align-self: start;
-          padding: 4px 8px 10px;
+          padding: 2px 8px 3px;
         }
-        #view-practice .builder { min-height: 76px; font-size: 38px; }
-        #view-practice .builder .frac { font-size: 38px; }
+        #view-practice .builder { min-height: 54px; font-size: 28px; }
+        #view-practice .builder .frac { font-size: 28px; }
+        #view-practice .slot { min-width: 50px; min-height: 50px; }
+        #view-practice .builder-label { margin: 0 0 2px; font-size: 13px; }
+        body.in-practice .head-note { display: none; }
+        body.in-practice header.app-head { margin-bottom: 2px; }
+        body.in-practice .practice-top { margin-bottom: 2px; }
+        body.in-practice .back-btn { min-height: 36px; padding-top: 4px; padding-bottom: 4px; }
+        #view-practice .navi-chip .n-face { width: 32px; height: 32px; }
+        #view-practice .model-note { font-size: 11px; line-height: 1.35; }
+        #view-practice .card { position: relative; }
+        #view-practice #feedback {
+          position: absolute; right: 20px; bottom: 10px; z-index: 6;
+          width: calc(50% - 46px); margin: 0;
+          box-shadow: 0 10px 26px rgba(34,48,58,.16);
+        }
+        #view-practice .model-unit { height: 6px; }
+        #view-practice .model-whole { min-height: 6px; gap: 1px; }
+        #view-practice .model-bars { gap: 2px; }
+        #view-practice #dots { margin: 2px 0 1px; }
+        #view-practice .model-label { line-height: 1.2; }
+        #view-practice .slot { min-height: 46px; }
+        #view-practice .model-heading { margin-bottom: 4px; font-size: 14px; }
+        #view-practice .model-switch button { min-height: 32px; padding: 3px 10px; }
+        #view-practice .model-row { margin: 2px 0; }
+        #view-practice .model-note { margin-top: 4px; line-height: 1.45; }
         #view-practice .step-panel {
           grid-area: steps; margin: 0; padding: 10px 0 0 18px;
           border-top: 0; border-left: 2px dashed var(--line);
@@ -419,13 +444,13 @@
         #view-practice .field { width: 112px; min-height: 62px; font-size: 34px; }
         #view-practice #keypad {
           grid-area: keypad; width: min(100%, 390px);
-          margin: 4px auto 0; gap: 7px;
+          margin: 0 auto; gap: 5px;
         }
-        #view-practice .keypad button { min-height: 48px; font-size: 24px; border-radius: 12px; }
+        #view-practice .keypad button { min-height: 44px; font-size: 23px; border-radius: 12px; }
         #view-practice .keypad button.util { font-size: 16px; }
         #view-practice #btn-check {
           grid-area: check; width: min(100%, 390px);
-          margin: 5px auto 0; min-height: 54px; font-size: 20px;
+          margin: 2px auto 0; min-height: 50px; font-size: 20px;
         }
         #view-practice #feedback {
           grid-area: feedback; margin-top: 5px; padding: 12px 14px;
@@ -621,6 +646,7 @@
           <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
             <span id="practice-type-name" style="font-size:20px; font-weight:800;"></span>
             <span class="navi-chip" id="practice-chip"><img class="n-face" id="practice-face" src="" alt="" /><span class="n-name" id="practice-navi-name"></span><span id="practice-navi-hint"></span></span>
+            <p id="session-note" class="session-note hidden" role="status"></p>
           </div>
           <div class="dots" id="dots" role="group" aria-label="10問の進み具合"></div>
           <div class="problem" id="problem"></div>
@@ -1119,6 +1145,7 @@
       /* ---------- 画面の切り替え ---------- */
       var views = ["home", "practice", "example", "result", "records"];
       function show(view) {
+        document.body.classList.toggle("in-practice", view === "practice");
         views.forEach(function (v) {
           document.getElementById("view-" + v).classList.toggle("hidden", v !== view);
         });
@@ -1186,9 +1213,9 @@
         return queue;
       }
 
-      function startNormal(type) {
+      function startNormal(type, notice) {
         var queue = makeQuestionQueue(type, SESSION_LEN);
-        session = { mode: "normal", type: type, queue: queue, idx: 0, results: [], addedMistakes: 0 };
+        session = { mode: "normal", type: type, queue: queue, idx: 0, results: [], addedMistakes: 0, notice: notice || "" };
         playSound("start");
         show("practice");
         renderProblem();
@@ -1220,7 +1247,7 @@
           if (!found) break;
           queue.push(found);
         }
-        if (queue.length < 4) { startNormal(type); return; }
+        if (queue.length < 4) { startNormal(type, "苦手な計算の 問題が 少ししか 集まらなかったので、ふつうの 練習に 切り替えたよ。"); return; }
         session = { mode: "focus", focusStage: "practice", type: type, focusCategory: weak.category, queue: queue, idx: 0, results: [], addedMistakes: 0, practiceSignatures: queue.map(problemSignature) };
         playSound("start");
         show("practice");
@@ -1253,6 +1280,10 @@
 
         document.getElementById("progress-label").textContent =
           (session.idx + 1) + " / " + session.queue.length + " もん";
+
+        var sNote = document.getElementById("session-note");
+        if (session.notice && session.idx === 0) { sNote.textContent = session.notice; sNote.classList.remove("hidden"); }
+        else { sNote.classList.add("hidden"); }
 
         renderDotsOnly();
         renderStep();
@@ -1873,20 +1904,26 @@
         if (!session) { refreshHome(); show("home"); return; }
         if (this.dataset.action === "again") { startNormal(session.type); return; }
         if (this.dataset.action === "confirm") {
-          var queue = [], seen = Object.create(null);
+          var queue = [], seen = Object.create(null), queueSeen = Object.create(null);
           session.practiceSignatures.forEach(function (sig) { seen[sig] = true; });
-          for (var i = 0; i < 3; i++) {
-            var found = null;
-            for (var tries = 0; tries < 1200; tries++) {
-              var candidate = makeProblem(session.type);
-              var sig = problemSignature(candidate);
-              if (questionCategory(candidate) === session.focusCategory && !seen[sig]) {
-                found = candidate; seen[sig] = true; break;
+          var collectConfirm = function (allowSeen) {
+            while (queue.length < 5) {
+              var found = null;
+              for (var tries = 0; tries < 1200; tries++) {
+                var candidate = makeProblem(session.type);
+                var sig = problemSignature(candidate);
+                if (questionCategory(candidate) !== session.focusCategory) continue;
+                if (queueSeen[sig]) continue;
+                if (!allowSeen && seen[sig]) continue;
+                found = candidate; queueSeen[sig] = true; break;
               }
+              if (!found) break;
+              queue.push(found);
             }
-            if (found) queue.push(found);
-          }
-          if (queue.length < 2) {
+          };
+          collectConfirm(false);
+          if (queue.length < 5) collectConfirm(true);
+          if (queue.length < 4) {
             this.textContent = "トップへ もどる";
             this.dataset.action = "home";
             document.getElementById("result-note").textContent = "確認問題を十分に用意できなかったよ。別の練習に進もう。";
