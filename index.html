@@ -292,6 +292,39 @@
       .section-title { font-size: 24px; font-weight: 800; margin: 0 0 6px; }
       .section-note { color: var(--ink-soft); font-size: 16px; margin: 0 0 10px; }
     
+      
+      /* 分数の大きさを確かめるテープ図 */
+      .fraction-model {
+        margin: 8px 4px 12px; padding: 12px 14px;
+        border: 1px solid var(--line); border-radius: 14px;
+        background: #f8fbfc; min-width: 0;
+      }
+      .model-heading { font-size: 15px; font-weight: 800; color: var(--ink-soft); margin-bottom: 7px; }
+      .model-row { display: grid; grid-template-columns: 76px minmax(0,1fr); gap: 8px; align-items: center; margin: 5px 0; }
+      .model-label { font-size: 13px; font-weight: 800; color: var(--ink-soft); }
+      .model-bars { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+      .model-whole { display: grid; gap: 2px; min-height: 17px; }
+      .model-unit { min-width: 0; height: 17px; border: 1px solid #b9c9d0; border-radius: 3px; background: #fff; }
+      .model-unit.filled.add { background: #f4b17e; border-color: #d96c2c; }
+      .model-unit.filled.sub { background: #8bc5dc; border-color: #22708f; }
+      .model-unit.filled.answer { background: #91cda0; border-color: #35824a; }
+      .model-note { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+      @media (min-width:760px) and (orientation:landscape) {
+        #view-practice .card {
+          grid-template-areas:
+            "heading heading"
+            "progress progress"
+            "problem steps"
+            "visual steps"
+            "builder steps"
+            "keypad steps"
+            "check feedback";
+        }
+        #view-practice .fraction-model { grid-area: visual; margin: 0 8px 4px; padding: 8px 12px; }
+        #view-practice .model-unit { height: 14px; }
+        #view-practice .model-row { grid-template-columns: 70px minmax(0,1fr); }
+      }
+
       /* ---------- タブレット最適化：横画面・タッチ操作 ---------- */
       button, [role="button"] { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
       button:focus-visible, [role="button"]:focus-visible {
@@ -478,6 +511,11 @@
           </div>
           <div class="dots" id="dots"></div>
           <div class="problem" id="problem"></div>
+
+          <section class="fraction-model" id="fraction-model" aria-label="分数の大きさを表す図">
+            <div class="model-heading">図で 大きさを たしかめよう</div>
+            <div id="fraction-model-content" aria-live="polite"></div>
+          </section>
 
           <div class="builder-wrap">
             <p class="builder-label">答えを 組み立てよう</p>
@@ -991,6 +1029,43 @@
         renderStep();
       }
 
+      function renderFractionModel() {
+        var p = currentProblem();
+        var host = document.getElementById("fraction-model-content");
+        if (!host || !p || !p.terms || p.terms.length !== 2) return;
+        var d = p.ansD;
+        function rows(units, kind) {
+          var out = "";
+          var wholeCount = Math.ceil(units / d);
+          for (var r = 0; r < wholeCount; r++) {
+            out += '<div class="model-whole" style="grid-template-columns:repeat(' + d + ',minmax(0,1fr))">';
+            for (var c = 0; c < d; c++) {
+              var filled = r * d + c < units;
+              out += '<span class="model-unit' + (filled ? ' filled ' + kind : '') + '"></span>';
+            }
+            out += "</div>";
+          }
+          if (units === 0) out = '<div class="model-whole" style="grid-template-columns:repeat(' + d + ',minmax(0,1fr))">' +
+            Array(d).fill('<span class="model-unit"></span>').join("") + "</div>";
+          return out;
+        }
+        function total(t) { return (t.w || 0) * d + t.n; }
+        function row(label, units, kind) {
+          return '<div class="model-row"><span class="model-label">' + label + '</span><div class="model-bars">' +
+            rows(units, kind) + '</div></div>';
+        }
+        var first = total(p.terms[0]), second = total(p.terms[1]);
+        var answer = p.op === "+" ? first + second : first - second;
+        var note = p.type === "mixed" ?
+          "1本のまとまりは " + d + "こ分。整数の部分も、分母と同じ数ずつのまとまりで表しているよ。" :
+          "1本のまとまりは " + d + "こ分。1つ分の大きさは、どの段も同じだよ。";
+        host.innerHTML =
+          row("① はじめ", first, "add") +
+          row("② あわせる", second, "sub") +
+          row("答え", answer, "answer") +
+          '<p class="model-note">' + note + '</p>';
+      }
+
       function renderStep() {
         var p = currentProblem();
         var step = currentStep();
@@ -1000,6 +1075,7 @@
         activeFieldKey = step.fields[0].key;
 
         document.getElementById("problem").innerHTML = problemHTML(p, step.id === "den");
+        renderFractionModel();
         renderBuilder();
 
         var inputSteps = session.steps.length - 1; // 最後の 'done' を除いた数
