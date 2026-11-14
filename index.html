@@ -1605,7 +1605,7 @@
         var note = document.getElementById("result-note");
         var again = document.getElementById("btn-again");
         var poseImg = document.getElementById("result-pose");
-        document.getElementById("btn-result-home").classList.toggle("hidden", session.mode === "tokkun");
+        document.getElementById("btn-result-home").classList.toggle("hidden", session.mode === "tokkun" || session.mode === "focus");
         if (session.mode === "focus") {
           poseImg.src = naviPose(session.type, ok >= Math.ceil(total * 0.8) ? "correct" : "complete");
           playSound(ok >= Math.ceil(total * 0.8) ? "allclear" : "practice");
